@@ -29,13 +29,20 @@ class AdminUsersController < ApplicationController
     @message = '一般管理者のダッシュボード'
   end
 
+  # 一般管理者作成ページを表示
+  def new
+    @admin_user = AdminUser.new
+  end
+
   # 一般管理者を作成
   def create
     @admin_user = AdminUser.new(admin_user_params)
+    @admin_user.role = 0
+
     if @admin_user.save
-      redirect_to admin_users_login_path, notice: 'Admin user created successfully'
+      redirect_to admin_users_super_admin_dashboard_path, notice: 'Admin user created successfully'
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -43,9 +50,9 @@ class AdminUsersController < ApplicationController
   def update
     @admin_user = AdminUser.find(params[:id])
     if @admin_user.update(admin_user_params)
-      redirect_to admin_users_login_path, notice: 'Admin user updated successfully'
+      redirect_to admin_users_super_admin_dashboard_path, notice: 'Admin user updated successfully'
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -53,7 +60,7 @@ class AdminUsersController < ApplicationController
   def destroy
     @admin_user = AdminUser.find(params[:id])
     @admin_user.destroy
-    redirect_to admin_users_login_path, notice: 'Admin user destroyed successfully'
+    redirect_to admin_users_super_admin_dashboard_path, notice: 'Admin user destroyed successfully'
   end
 
   private
@@ -71,6 +78,6 @@ class AdminUsersController < ApplicationController
   end
 
   def admin_user_params
-    params.require(:admin_user).permit(:username, :password, :role)
+    params.require(:admin_user).permit(:username, :password)
   end
 end

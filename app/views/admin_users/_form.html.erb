@@ -4,26 +4,21 @@
       <h2><%= pluralize(admin_user.errors.count, "error") %> prohibited this admin_user from being saved:</h2>
 
       <ul>
-        <% admin_user.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+        <% admin_user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
   <div>
-    <%= form.label :username, style: "display: block" %>
+    <%= form.label :username, 'ユーザー名', style: "display: block" %>
     <%= form.text_field :username %>
   </div>
 
   <div>
-    <%= form.label :password_digest, style: "display: block" %>
-    <%= form.text_field :password_digest %>
-  </div>
-
-  <div>
-    <%= form.label :role, style: "display: block" %>
-    <%= form.number_field :role %>
+    <%= form.label :password, 'パスワード', style: "display: block" %>
+    <%= form.text_field :password %>
   </div>
 
   <div>
