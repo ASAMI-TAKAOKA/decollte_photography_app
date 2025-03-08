@@ -1,7 +1,7 @@
 class AdminUsersController < ApplicationController
   # 特権管理者のみアクセス可能
-  before_action :authenticate_admin, only: [:create, :update, :destroy]
-  before_action :check_permissions, only: [:create, :update]
+  before_action :authenticate_admin, only: [ :create, :update, :destroy ]
+  before_action :check_permissions, only: [ :create, :update ]
 
   def login
     # ログインフォームが送信された場合
@@ -10,23 +10,23 @@ class AdminUsersController < ApplicationController
       password = params[:password]
 
       # 特権管理者ログインの処理
-      if username == 'admin' && password == 'UMtDj4ZBv%&d@Tzh'
-        session[:admin_user] = 'admin'
+      if username == "admin" && password == "UMtDj4ZBv%&d@Tzh"
+        session[:admin_user] = "admin"
         redirect_to admin_users_super_admin_dashboard_path
       # 一般管理者ログインの処理
       else
-        session[:admin_user] = 'regular_admin'
+        session[:admin_user] = "regular_admin"
         redirect_to admin_users_regular_admin_dashboard_path
       end
     end
   end
 
   def super_admin_dashboard
-    @message = '特権管理者のダッシュボード'
+    @message = "特権管理者のダッシュボード"
   end
 
   def regular_admin_dashboard
-    @message = '一般管理者のダッシュボード'
+    @message = "一般管理者のダッシュボード"
   end
 
   # 一般管理者作成ページを表示
@@ -40,7 +40,7 @@ class AdminUsersController < ApplicationController
     @admin_user.role = 0
 
     if @admin_user.save
-      redirect_to admin_users_super_admin_dashboard_path, notice: 'Admin user created successfully'
+      redirect_to admin_users_super_admin_dashboard_path, notice: "Admin user created successfully"
     else
       render :new, status: :unprocessable_entity
     end
@@ -50,7 +50,7 @@ class AdminUsersController < ApplicationController
   def update
     @admin_user = AdminUser.find(params[:id])
     if @admin_user.update(admin_user_params)
-      redirect_to admin_users_super_admin_dashboard_path, notice: 'Admin user updated successfully'
+      redirect_to admin_users_super_admin_dashboard_path, notice: "Admin user updated successfully"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -60,20 +60,20 @@ class AdminUsersController < ApplicationController
   def destroy
     @admin_user = AdminUser.find(params[:id])
     @admin_user.destroy
-    redirect_to admin_users_super_admin_dashboard_path, notice: 'Admin user destroyed successfully'
+    redirect_to admin_users_super_admin_dashboard_path, notice: "Admin user destroyed successfully"
   end
 
   private
 
   def authenticate_admin
-    unless session[:admin_user] == 'admin'
-      redirect_to admin_users_login_path, alert: 'このページへは、特権管理者しかログインできません。'
+    unless session[:admin_user] == "admin"
+      redirect_to admin_users_login_path, alert: "このページへは、特権管理者しかログインできません。"
     end
   end
 
   def check_permissions
-    unless session[:admin_user] == 'admin' || current_user.role == 0
-      redirect_to root_path, alert: 'アクセス権限がありません。'
+    unless session[:admin_user] == "admin" || current_user.role == 0
+      redirect_to root_path, alert: "アクセス権限がありません。"
     end
   end
 
