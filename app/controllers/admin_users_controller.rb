@@ -2,6 +2,7 @@ class AdminUsersController < ApplicationController
   # 特権管理者のみアクセス可能
   before_action :authenticate_admin, only: [ :create, :update, :destroy ]
   before_action :check_permissions, only: [ :create, :update ]
+  before_action :set_admin_user, only: [:show, :edit, :update, :destroy]
 
   def login
     # ログインフォームが送信された場合
@@ -44,17 +45,21 @@ class AdminUsersController < ApplicationController
     @admin_user.role = 0
 
     if @admin_user.save
-      redirect_to admin_users_super_admin_dashboard_path, notice: "Admin user created successfully"
+      redirect_to new_admin_user_path, notice: "Admin user created successfully"
     else
       render :new, status: :unprocessable_entity
     end
+  end
+
+  # 一般管理者更新ページを表示
+  def edit
   end
 
   # 一般管理者情報を更新
   def update
     @admin_user = AdminUser.find(params[:id])
     if @admin_user.update(admin_user_params)
-      redirect_to admin_users_super_admin_dashboard_path, notice: "Admin user updated successfully"
+      redirect_to edit_admin_user_path, notice: "Admin user updated successfully"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -79,6 +84,10 @@ class AdminUsersController < ApplicationController
     unless session[:admin_user] == "admin" || current_user.role == 0
       redirect_to root_path, alert: "アクセス権限がありません。"
     end
+  end
+
+  def set_admin_user
+    @admin_user = AdminUser.find(params[:id])
   end
 
   def admin_user_params
