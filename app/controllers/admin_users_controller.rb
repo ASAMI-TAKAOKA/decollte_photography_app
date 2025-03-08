@@ -29,6 +29,10 @@ class AdminUsersController < ApplicationController
     @message = "一般管理者のダッシュボード"
   end
 
+  def show
+    @admin_user = AdminUser.find(params[:id])
+  end
+
   # 一般管理者作成ページを表示
   def new
     @admin_user = AdminUser.new
