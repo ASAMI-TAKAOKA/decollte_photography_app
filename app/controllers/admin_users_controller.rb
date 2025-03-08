@@ -9,23 +9,24 @@ class AdminUsersController < ApplicationController
       username = params[:username]
       password = params[:password]
 
-      # 特権管理者ログインの処理（例）
+      # 特権管理者ログインの処理
       if username == 'admin' && password == 'UMtDj4ZBv%&d@Tzh'
         session[:admin_user] = 'admin'
-        redirect_to admin_users_dashboard_path
+        redirect_to admin_users_super_admin_dashboard_path
+      # 一般管理者ログインの処理
       else
-        flash.now[:alert] = 'ユーザ名またはパスワードが正しくありません。'
+        session[:admin_user] = 'regular_admin'
+        redirect_to admin_users_regular_admin_dashboard_path
       end
     end
   end
 
-  def dashboard
-    # ダッシュボードの表示処理（例）
-    if session[:admin_user] == 'admin'
-      @message = '特権管理者のダッシュボード'
-    else
-      @message = '一般管理者のダッシュボード'
-    end
+  def super_admin_dashboard
+    @message = '特権管理者のダッシュボード'
+  end
+
+  def regular_admin_dashboard
+    @message = '一般管理者のダッシュボード'
   end
 
   # 一般管理者を作成
