@@ -1,6 +1,6 @@
 class AdminUsersController < ApplicationController
-  # 管理者でないとアクセスできないアクションに制限をかける
-  before_action :check_admin, only: [:create, :update, :destroy]
+  # 特権管理者でないとアクセスできないアクションに制限をかける
+  before_action :check_super_admin, only: [:create, :update, :destroy]
 
   def index
     @admin_users = AdminUser.all
@@ -36,9 +36,9 @@ class AdminUsersController < ApplicationController
 
   private
 
-  # 管理者かどうかを確認
-  def check_admin
-    unless current_user.role == 1  # roleが1でないユーザーは管理者ではない
+  # 特権管理者かどうかを確認
+  def check_super_admin
+    unless current_user.role == 1  # roleが1でないユーザーは特権管理者ではない
       redirect_to root_path, alert: 'You do not have permission to perform this action.'  # アクセス拒否
     end
   end
