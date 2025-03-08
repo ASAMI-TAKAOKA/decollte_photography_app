@@ -2,7 +2,7 @@ class AdminUsersController < ApplicationController
   # 特権管理者のみアクセス可能
   before_action :authenticate_admin, only: [ :create, :update, :destroy ]
   before_action :check_permissions, only: [ :create, :update ]
-  before_action :set_admin_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_admin_user, only: [ :show, :edit, :update, :destroy ]
 
   def login
     # ログインフォームが送信された場合
