@@ -60,7 +60,7 @@ RSpec.describe AdminUser, type: :model do
   describe "特権管理者の制約" do
     it "特権管理者 (role: 1) が 1 人しか作れないこと" do
       AdminUser.create!(username: "super_admin_user", password: "password123", role: 1)
-      
+
       another_admin = AdminUser.new(username: "another_super_admin_user", password: "password456", role: 1)
       expect(another_admin).to be_invalid
       expect(another_admin.errors[:role]).to include("特権管理者はすでに存在しています")
