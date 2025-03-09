@@ -1,0 +1,10 @@
+<h1>ブランド一覧</h1>
+<%= link_to '新しいブランドを作成', new_brand_path %>
+<ul>
+  <% @brands.each do |brand| %>
+    <li>
+      <%= link_to brand.name, brand %>
+      <%= link_to 'ブランドを削除', brand, data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" } %>
+    </li>
+  <% end %>
+</ul>

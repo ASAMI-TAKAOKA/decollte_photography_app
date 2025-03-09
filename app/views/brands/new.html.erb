@@ -1,0 +1,11 @@
+<% content_for :title, "新しいブランドを作成する" %>
+
+<h1>新しいブランドを作成する</h1>
+
+<%= render "form", brand: @brand %>
+
+<br>
+
+<div>
+  <%= link_to "ブランド一覧に戻る", brands_path %>
+</div>
