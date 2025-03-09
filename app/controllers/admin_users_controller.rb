@@ -1,70 +1,96 @@
 class AdminUsersController < ApplicationController
-  before_action :set_admin_user, only: %i[ show edit update destroy ]
+  # 特権管理者のみアクセス可能
+  before_action :authenticate_admin, only: [ :create, :update, :destroy ]
+  before_action :check_permissions, only: [ :create, :update ]
+  before_action :set_admin_user, only: [ :show, :edit, :update, :destroy ]
 
-  # GET /admin_users or /admin_users.json
-  def index
-    @admin_users = AdminUser.all
+  def login
+    # ログインフォームが送信された場合
+    if request.post?
+      username = params[:username]
+      password = params[:password]
+
+      # 特権管理者ログインの処理
+      if username == "admin" && password == "UMtDj4ZBv%&d@Tzh"
+        session[:admin_user] = "admin"
+        redirect_to admin_users_super_admin_dashboard_path
+      # 一般管理者ログインの処理
+      else
+        session[:admin_user] = "regular_admin"
+        redirect_to admin_users_regular_admin_dashboard_path
+      end
+    end
   end
 
-  # GET /admin_users/1 or /admin_users/1.json
+  def super_admin_dashboard
+    @message = "特権管理者のダッシュボード"
+  end
+
+  def regular_admin_dashboard
+    @message = "一般管理者のダッシュボード"
+  end
+
   def show
+    @admin_user = AdminUser.find(params[:id])
   end
 
-  # GET /admin_users/new
+  # 一般管理者作成ページを表示
   def new
     @admin_user = AdminUser.new
   end
 
-  # GET /admin_users/1/edit
+  # 一般管理者を作成
+  def create
+    @admin_user = AdminUser.new(admin_user_params)
+    @admin_user.role = 0
+
+    if @admin_user.save
+      redirect_to new_admin_user_path, notice: "Admin user created successfully"
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  # 一般管理者更新ページを表示
   def edit
   end
 
-  # POST /admin_users or /admin_users.json
-  def create
-    @admin_user = AdminUser.new(admin_user_params)
-
-    respond_to do |format|
-      if @admin_user.save
-        format.html { redirect_to @admin_user, notice: "Admin user was successfully created." }
-        format.json { render :show, status: :created, location: @admin_user }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @admin_user.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /admin_users/1 or /admin_users/1.json
+  # 一般管理者情報を更新
   def update
-    respond_to do |format|
-      if @admin_user.update(admin_user_params)
-        format.html { redirect_to @admin_user, notice: "Admin user was successfully updated." }
-        format.json { render :show, status: :ok, location: @admin_user }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @admin_user.errors, status: :unprocessable_entity }
-      end
+    @admin_user = AdminUser.find(params[:id])
+    if @admin_user.update(admin_user_params)
+      redirect_to edit_admin_user_path, notice: "Admin user updated successfully"
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
-  # DELETE /admin_users/1 or /admin_users/1.json
+  # 管理者の削除
   def destroy
-    @admin_user.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to admin_users_path, status: :see_other, notice: "Admin user was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    @admin_user = AdminUser.find(params[:id])
+    @admin_user.destroy
+    redirect_to admin_users_super_admin_dashboard_path, notice: "Admin user destroyed successfully"
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_admin_user
-      @admin_user = AdminUser.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def admin_user_params
-      params.expect(admin_user: [ :username, :password_digest, :role ])
+  def authenticate_admin
+    unless session[:admin_user] == "admin"
+      redirect_to admin_users_login_path, alert: "このページへは、特権管理者しかログインできません。"
     end
+  end
+
+  def check_permissions
+    unless session[:admin_user] == "admin" || current_user.role == 0
+      redirect_to root_path, alert: "アクセス権限がありません。"
+    end
+  end
+
+  def set_admin_user
+    @admin_user = AdminUser.find(params[:id])
+  end
+
+  def admin_user_params
+    params.require(:admin_user).permit(:username, :password)
+  end
 end
