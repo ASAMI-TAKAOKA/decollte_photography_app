@@ -7,4 +7,5 @@ Rails.application.routes.draw do
   resources :admin_users, only: [ :new, :create, :edit, :update, :destroy, :show ]
   get "admin/super_admin_dashboard", to: "admin_users#super_admin_dashboard", as: "admin_users_super_admin_dashboard"
   get "admin/regular_admin_dashboard", to: "admin_users#regular_admin_dashboard", as: "admin_users_regular_admin_dashboard"
+  resources :brands, only: [ :index, :new, :create, :destroy, :show ]
 end
