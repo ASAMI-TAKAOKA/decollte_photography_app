@@ -1,0 +1,7 @@
+<h1><%= @store.name %> の詳細</h1>
+
+<p>住所: <%= @store.address %></p>
+<p>電話番号: <%= @store.phone_number %></p>
+
+<%= link_to '編集', edit_brand_store_path(@brand, @store) %> |
+<%= link_to '戻る', brand_stores_path(@brand) %>
