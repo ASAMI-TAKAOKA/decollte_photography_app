@@ -1,0 +1,33 @@
+<%= form_with model: @store, url: brand_stores_path(@brand) do |form| %>
+  <% if @store.errors.any? %>
+    <div>
+      <h2><%= pluralize(@store.errors.count, "error") %> prohibited this store from being saved:</h2>
+      <ul>
+        <% @store.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :address %>
+    <%= form.text_field :address %>
+  </div>
+
+  <div>
+    <%= form.label :phone_number %>
+    <%= form.text_field :phone_number %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
+
+

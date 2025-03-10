@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_09_130605) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_09_144639) do
   create_table "admin_users", force: :cascade do |t|
     t.string "username"
     t.string "password_digest"
@@ -25,4 +25,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_09_130605) do
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_brands_on_name", unique: true
   end
+
+  create_table "stores", force: :cascade do |t|
+    t.string "name"
+    t.integer "brand_id", null: false
+    t.string "address"
+    t.string "phone_number"
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["brand_id"], name: "index_stores_on_brand_id"
+  end
+
+  add_foreign_key "stores", "brands"
 end
