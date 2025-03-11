@@ -1,6 +1,6 @@
 class AdminUsersController < ApplicationController
   # 特権管理者のみアクセス可能
-  before_action :authenticate_admin, only: [ :create, :update, :destroy ]
+  before_action :authenticate_admin, only: [ :index, :create, :update, :destroy ]
   before_action :check_permissions, only: [ :create, :update ]
   before_action :set_admin_user, only: [ :show, :edit, :update, :destroy ]
 
@@ -28,6 +28,10 @@ class AdminUsersController < ApplicationController
 
   def regular_admin_dashboard
     @message = "一般管理者のダッシュボード"
+  end
+
+  def index
+    @admin_users = AdminUser.all
   end
 
   def show
@@ -74,6 +78,7 @@ class AdminUsersController < ApplicationController
 
   private
 
+  # 特権管理者のみ許可する認証メソッド
   def authenticate_admin
     unless session[:admin_user] == "admin"
       redirect_to admin_users_login_path, alert: "このページへは、特権管理者しかログインできません。"

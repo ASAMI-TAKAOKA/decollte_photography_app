@@ -1,0 +1,24 @@
+<% content_for :title, "管理者一覧" %>
+
+<h1>管理者一覧</h1>
+
+<%= link_to '管理者を新規作成する', new_admin_user_path %>
+
+<table>
+  <thead>
+    <tr>
+      <th>ユーザー名</th>
+      <th>役割</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @admin_users.each do |admin_user| %>
+      <tr>
+        <td><%= admin_user.username %></td>
+        <td><%= admin_user.role == 1 ? '特権管理者' : '一般管理者' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to '戻る', admin_users_super_admin_dashboard_path %>
