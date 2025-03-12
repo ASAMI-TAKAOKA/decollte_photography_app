@@ -1,12 +1,16 @@
 class AdminUsersController < ApplicationController
-  # 特権管理者のみアクセス可能
-  before_action :authenticate_admin, only: [ :index, :create, :update, :destroy ]
-  before_action :check_permissions, only: [ :create, :update ]
+  # 特権管理者のアクセス権限
+  before_action :authenticate_super_admin, only: [ :index, :create, :update, :destroy, :super_admin_dashboard ]
+  # 一般管理者のアクセス権限
+  before_action :authenticate_regular_admin, only: [ :index, :regular_admin_dashboard ]
   before_action :set_admin_user, only: [ :show, :edit, :update, :destroy ]
 
   def login
     # ログインフォームが送信された場合
     if request.post?
+      # 以前のセッション情報を破棄
+      reset_session
+
       username = params[:username]
       password = params[:password]
 
@@ -19,6 +23,22 @@ class AdminUsersController < ApplicationController
         session[:admin_user] = "regular_admin"
         redirect_to admin_users_regular_admin_dashboard_path
       end
+    end
+  end
+
+  def logout
+    reset_session
+    redirect_to admin_users_login_path, notice: "ログアウトしました。"
+  end
+
+  # ログイン済みユーザーの権限によってリダイレクトするダッシュボードを切り替える
+  def switch_bashboard_by_role
+    if session[:admin_user] == "admin"
+      redirect_to admin_users_super_admin_dashboard_path
+    elsif session[:admin_user] == "regular_admin"
+      redirect_to admin_users_regular_admin_dashboard_path
+    else
+      redirect_to admin_users_login_path, alert: "ログインが必要です"
     end
   end
 
@@ -79,15 +99,16 @@ class AdminUsersController < ApplicationController
   private
 
   # 特権管理者のみ許可する認証メソッド
-  def authenticate_admin
+  def authenticate_super_admin
     unless session[:admin_user] == "admin"
-      redirect_to admin_users_login_path, alert: "このページへは、特権管理者しかログインできません。"
+      redirect_to root_path, alert: "特権管理者のみアクセスできます。"
     end
   end
 
-  def check_permissions
-    unless session[:admin_user] == "admin" || current_user.role == 0
-      redirect_to root_path, alert: "アクセス権限がありません。"
+  # 一般管理者のみ許可する認証メソッド
+  def authenticate_regular_admin
+    if session[:admin_user] == "admin"
+      redirect_to root_path, alert: "一般管理者のみアクセスできます。"
     end
   end
 

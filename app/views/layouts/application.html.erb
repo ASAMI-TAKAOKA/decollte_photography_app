@@ -23,18 +23,30 @@
   </head>
 
   <body>
-    <% if flash[:notice] %>
-      <div class="alert alert-success">
-        <%= flash[:notice] %>
-      </div>
-    <% end %>
+    <header class="flex justify-between items-center p-4 bg-gray-800 text-white">
+      <h1 class="text-2xl">Decorte Photography</h1>
 
-    <% if flash[:alert] %>
-      <div class="alert alert-danger">
-        <%= flash[:alert] %>
+      <div class="flex gap-4">
+        <% if session[:admin_user] %>
+          <%= button_to 'ログアウト', admin_users_logout_path, method: :delete, data: { confirm: 'ログアウトしますか？' }, class: 'bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded' %>
+        <% end %>
       </div>
-    <% end %>
+    </header>
 
-    <%= yield %>
+    <div class="p-4">
+      <% if flash[:notice] %>
+        <div class="bg-green-500 text-white p-2 rounded mb-4">
+          <%= flash[:notice] %>
+        </div>
+      <% end %>
+
+      <% if flash[:alert] %>
+        <div class="bg-red-500 text-white p-2 rounded mb-4">
+          <%= flash[:alert] %>
+        </div>
+      <% end %>
+
+      <%= yield %>
+    </div>
   </body>
 </html>
