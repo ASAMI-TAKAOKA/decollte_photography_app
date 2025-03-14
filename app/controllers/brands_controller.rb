@@ -1,5 +1,6 @@
 class BrandsController < ApplicationController
   before_action :set_brand, only: %i[ show edit update destroy ]
+  before_action :prohibit_access_for_regular_admin, only: %i[ show edit update destroy ]
 
   # ブランド一覧
   def index
@@ -51,6 +52,13 @@ class BrandsController < ApplicationController
 
   def set_brand
     @brand = Brand.find(params[:id])
+  end
+
+  # 一般管理者のアクセスを禁じる
+  def prohibit_access_for_regular_admin
+    unless session[:admin_user] == "admin"
+      redirect_to root_path, alert: "権限がありません。"
+    end
   end
 
   def brand_params

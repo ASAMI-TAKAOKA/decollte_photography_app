@@ -1,4 +1,4 @@
-<%= form_with model: @store, url: brand_stores_path(@brand) do |form| %>
+<%= form_with model: @store, url: @store.new_record? ? brand_stores_path(@brand) : brand_store_path(@brand, @store), method: @store.new_record? ? :post : :patch do |form| %>
   <% if @store.errors.any? %>
     <div>
       <h2><%= pluralize(@store.errors.count, "error") %> prohibited this store from being saved:</h2>

@@ -1,4 +1,9 @@
 <% content_for :title, "特権管理者のダッシュボード" %>
 
 <h1><%= @message %></h1>
-<%= link_to '新しい管理者を作成', new_admin_user_path, class: 'btn btn-primary' %>
+<div>
+  <%= link_to '管理者一覧', admin_users_path, class: 'btn btn-primary' %>
+</div>
+<div>
+  <%= link_to 'ブランド一覧', brands_path, class: 'btn btn-primary' %>
+</div>
