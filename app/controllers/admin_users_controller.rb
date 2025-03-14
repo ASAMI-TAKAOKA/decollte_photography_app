@@ -1,8 +1,8 @@
 class AdminUsersController < ApplicationController
-  # 特権管理者のアクセス権限
-  before_action :authenticate_super_admin, only: [ :index, :create, :update, :destroy, :super_admin_dashboard ]
-  # 一般管理者のアクセス権限
-  before_action :authenticate_regular_admin, only: [ :index, :regular_admin_dashboard ]
+  # 一般管理者のアクセスを禁じる
+  before_action :prohibit_access_for_regular_admin, only: [ :index, :show, :new, :create, :edit, :update, :destroy, :super_admin_dashboard ]
+  # 特権管理者のアクセスを禁じる
+  before_action :prohibit_access_for_super_admin, only: [ :regular_admin_dashboard ]
   before_action :set_admin_user, only: [ :show, :edit, :update, :destroy ]
 
   def login
@@ -98,15 +98,15 @@ class AdminUsersController < ApplicationController
 
   private
 
-  # 特権管理者のみ許可する認証メソッド
-  def authenticate_super_admin
+  # 一般管理者のアクセスを禁じる
+  def prohibit_access_for_regular_admin
     unless session[:admin_user] == "admin"
       redirect_to root_path, alert: "特権管理者のみアクセスできます。"
     end
   end
 
-  # 一般管理者のみ許可する認証メソッド
-  def authenticate_regular_admin
+  # 特権管理者のアクセスを禁じる
+  def prohibit_access_for_super_admin
     if session[:admin_user] == "admin"
       redirect_to root_path, alert: "一般管理者のみアクセスできます。"
     end
