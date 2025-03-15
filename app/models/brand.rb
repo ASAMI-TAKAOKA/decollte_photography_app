@@ -1,5 +1,5 @@
 class Brand < ApplicationRecord
   has_many :stores, dependent: :destroy
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
 end
