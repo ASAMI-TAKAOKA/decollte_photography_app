@@ -24,7 +24,7 @@ class StoresController < ApplicationController
     if @store.save
       redirect_to brand_stores_path(@brand), notice: "店舗が作成されました。"
     else
-      render :new
+      render :new, status: :unprocessable_entity # Turboに対応
     end
   end
 
@@ -37,7 +37,7 @@ class StoresController < ApplicationController
     if @store.update(store_params)
       redirect_to brand_store_path(@brand, @store), notice: "店舗情報が更新されました。"
     else
-      render :edit
+      render :edit, status: :unprocessable_entity # Turboに対応
     end
   end
 

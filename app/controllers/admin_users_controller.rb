@@ -71,7 +71,7 @@ class AdminUsersController < ApplicationController
     if @admin_user.save
       redirect_to new_admin_user_path, notice: "Admin user created successfully"
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_entity # Turboに対応
     end
   end
 
@@ -85,7 +85,7 @@ class AdminUsersController < ApplicationController
     if @admin_user.update(admin_user_params)
       redirect_to edit_admin_user_path, notice: "Admin user updated successfully"
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_entity # Turboに対応
     end
   end
 

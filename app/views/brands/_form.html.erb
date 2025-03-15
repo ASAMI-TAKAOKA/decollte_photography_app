@@ -1,7 +1,21 @@
-<%= form_with(model: @brand, local: true) do |form| %>
+<%= form_with model: @brand, url: @brand.new_record? ? brands_path : brand_path(@brand), method: @brand.new_record? ? :post : :patch do |form| %>
+  <% if @brand.errors.any? %>
+    <div>
+      <h2><%= pluralize(@brand.errors.count, "error") %> prohibited this brand from being saved:</h2>
+      <ul>
+        <% @brand.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
   <div>
     <%= form.label :name %>
     <%= form.text_field :name %>
   </div>
-  <%= form.submit %>
+
+  <div>
+    <%= form.submit %>
+  </div>
 <% end %>

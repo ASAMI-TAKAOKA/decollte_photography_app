@@ -21,10 +21,16 @@ class BrandsController < ApplicationController
   # ブランドを保存
   def create
     @brand = Brand.new(brand_params)
-    if @brand.save
-      redirect_to @brand, notice: "ブランドを作成しました。"
+
+    if Brand.exists?(name: @brand.name)
+      flash[:alert] = "#{@brand.name}というブランド名はすでに存在します。"
+      render :new, status: :unprocessable_entity # Turboに対応
     else
-      render :new, status: :unprocessable_entity
+      if @brand.save
+        redirect_to @brand, notice: "ブランドが作成されました。"
+      else
+        render :new, status: :unprocessable_entity # Turboに対応
+      end
     end
   end
 
