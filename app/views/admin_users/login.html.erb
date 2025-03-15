@@ -3,15 +3,15 @@
 <h1>管理者ログイン</h1>
 
 <%= form_with url: admin_users_login_path, method: :post do |form| %>
-  <div>
+  <div class="mb-4">
     <%= form.label :username, 'ユーザ名' %>
     <%= form.text_field :username, required: true %>
   </div>
-  <div>
+  <div class="mb-4">
     <%= form.label :password, 'パスワード' %>
     <%= form.password_field :password, required: true %>
   </div>
   <div>
-    <%= form.submit 'ログイン' %>
+    <%= form.submit 'ログイン', class: 'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer' %>
   </div>
 <% end %>
