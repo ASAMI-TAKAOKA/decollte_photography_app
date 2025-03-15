@@ -21,10 +21,16 @@ class StoresController < ApplicationController
   # 店舗作成
   def create
     @store = @brand.stores.build(store_params)
-    if @store.save
-      redirect_to brand_stores_path(@brand), notice: "店舗が作成されました。"
-    else
+
+    if Store.exists?(name: @store.name)
+      flash[:alert] = "#{@store.name}という店舗名はすでに存在します。"
       render :new, status: :unprocessable_entity # Turboに対応
+    else
+      if @store.save
+        redirect_to brand_stores_path(@brand), notice: "店舗が作成されました。"
+      else
+        render :new, status: :unprocessable_entity # Turboに対応
+      end
     end
   end
 
