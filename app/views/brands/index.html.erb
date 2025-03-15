@@ -8,9 +8,9 @@
   <% @brands.each do |brand| %>
     <li>
       <%= brand.name %> |
-      <%= link_to '詳細', brand_path(brand) %> |
-      <%= link_to '編集', edit_brand_path(brand) %> |
-      <%= link_to '削除', brand_path(brand),
+      <%= link_to '店舗一覧', brand_path(brand) %> |
+      <%= link_to 'ブランドの編集', edit_brand_path(brand) %> |
+      <%= link_to 'ブランドの削除', brand_path(brand),
             data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" } %>
     </li>
   <% end %>

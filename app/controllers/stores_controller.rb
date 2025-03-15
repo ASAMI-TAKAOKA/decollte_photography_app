@@ -87,7 +87,7 @@ class StoresController < ApplicationController
   # 一般管理者のアクセスを禁じる
   def prohibit_access_for_regular_admin
     unless session[:admin_user] == "admin"
-      redirect_to root_path, alert: "権限がありません。"
+      redirect_to root_path, alert: "特権管理者のみアクセスが可能です。"
     end
   end
 
