@@ -27,7 +27,7 @@
               <td><%= store.address %></td>
               <td><%= store.phone_number %></td>
 
-              <td class="actions">
+              <td>
                 <%= link_to '詳細', brand_store_path(@brand, store) %>
                 <%= link_to '編集', edit_brand_store_path(@brand, store) %>
                 <%= link_to '削除', brand_store_path(@brand, store), data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" } %>
