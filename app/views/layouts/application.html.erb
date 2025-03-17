@@ -2,7 +2,7 @@
 <html>
   <head>
     <title><%= content_for(:title) || "Decorte Photography App" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
@@ -10,38 +10,200 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+    <!-- 内部CSS -->
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* ヘッダー */
+      header {
+        background-color: rgba(0, 0, 0, 0.86);
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      header h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.75rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        color: #fff;
+      }
+
+      .header-right {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .header-btn {
+        font-family: 'Poppins', sans-serif;
+        background-color: lightpink;
+        color: fff;
+        border: 2px solid rgba(0, 0, 0, 0.86);
+        padding: 0.5rem 1.25rem;
+        border-radius: 0.375rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+      }
+
+      .header-btn:hover {
+        background-color: rgba(0, 0, 0, 0.86);
+        color: #fff;
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      /* ブランド詳細 */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+      }
+
+      .btn-primary {
+        background-color: lightpink;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 0.375rem;
+        text-decoration: none;
+        font-weight: 500;
+        display: inline-block;
+        margin: 1rem 0;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      .btn-primary:hover {
+        background-color: hotpink;
+        transform: translateY(-2px);
+      }
+
+      /* カードデザイン */
+      .card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 0.375rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        transition: box-shadow 0.3s ease-in-out;
+      }
+
+      .card:hover {
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+      }
+
+      .card .info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        flex-grow: 1;
+      }
+
+      .card .info p {
+        font-size: 0.875rem;
+        color: #666;
+      }
+
+      .card .h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.5rem;
+      }
+
+      /* テーブルデザイン */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 2rem;
+      }
+
+      th, td {
+        padding: 0.75rem;
+        text-align: left;
+        border: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #f4f4f4;
+        font-weight: 600;
+      }
+
+      td a {
+        text-decoration: none;
+        color: #007bff;
+      }
+
+      td a:hover {
+        text-decoration: underline;
+      }
+
+      /* レスポンシブ対応 */
+      @media (max-width: 768px) {
+        .card {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .card .actions {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.5rem;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .card {
+          padding: 0.75rem;
+        }
+
+        h1 {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
   </head>
-
+  <%= javascript_importmap_tags %>
   <body>
-    <header class="flex justify-between items-center p-4 bg-gray-800 text-white">
-      <h1 class="text-2xl">Decorte Photography</h1>
-
-      <div class="flex gap-4">
+    <!-- ヘッダー部分 -->
+    <header>
+      <h1>Decorte Photography</h1>
+      <div class="header-right">
         <% if session[:admin_user] %>
-          <%= button_to 'ログアウト', admin_users_logout_path, method: :delete, data: { confirm: 'ログアウトしますか？' }, class: 'bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded' %>
+          <%= button_to 'ログアウト', admin_users_logout_path, method: :delete, data: { confirm: 'ログアウトしますか？' }, class: 'header-btn' %>
         <% end %>
       </div>
     </header>
 
-    <div class="p-4">
+    <div class="container">
       <% if flash[:notice] %>
-        <div class="bg-green-500 text-white p-2 rounded mb-4">
+        <div class="flash-message notice">
           <%= flash[:notice] %>
         </div>
       <% end %>
 
       <% if flash[:alert] %>
-        <div class="bg-red-500 text-white p-2 rounded mb-4">
+        <div class="flash-message alert">
           <%= flash[:alert] %>
         </div>
       <% end %>
