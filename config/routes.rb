@@ -9,8 +9,8 @@ Rails.application.routes.draw do
   resources :admin_users
   get "admin/super_admin_dashboard", to: "admin_users#super_admin_dashboard", as: "admin_users_super_admin_dashboard"
   get "admin/regular_admin_dashboard", to: "admin_users#regular_admin_dashboard", as: "admin_users_regular_admin_dashboard"
-  resources :brands do
-    resources :stores do
+  resources :brands, param: :slug do
+    resources :stores, param: :id do
       member do
         get :move_higher
         get :move_lower
