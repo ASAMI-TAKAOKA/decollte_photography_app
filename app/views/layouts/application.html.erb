@@ -32,12 +32,19 @@
         align-items: center;
       }
 
-      header h1 {
-        font-family: 'Playfair Display', serif;
-        font-size: 1.75rem;
-        font-weight: 600;
-        letter-spacing: 1px;
-        color: #fff;
+      header h1 a {
+        color: white;         /* 通常時の文字色 */
+        text-decoration: none; /* 下線の除去 */
+        font-weight: bold;     /* 強調 */
+      }
+
+      header h1 a:visited {
+        color: white;         /* 訪問済みのリンクの文字色 */
+      }
+
+      header h1 a:hover {
+        color: #ffcc00;       /* ホバー時の文字色 (アクセントカラーにおすすめ) */
+        text-shadow: 0 0 10px rgba(255, 204, 0, 0.8); /* おしゃれな光る効果 */
       }
 
       .header-right {
@@ -187,7 +194,9 @@
   <body>
     <!-- ヘッダー部分 -->
     <header>
-      <h1>Decorte Photography</h1>
+      <h1>
+      <%= link_to 'Decorte Photography', root_path %>
+      </h1>
       <div class="header-right">
         <% if session[:admin_user] %>
           <%= button_to 'ログアウト', admin_users_logout_path, method: :delete, data: { confirm: 'ログアウトしますか？' }, class: 'header-btn' %>
