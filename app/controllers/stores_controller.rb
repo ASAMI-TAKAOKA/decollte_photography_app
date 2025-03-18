@@ -69,8 +69,8 @@ class StoresController < ApplicationController
 
   # ブランドのセット
   def set_brand
-    Rails.logger.debug "params[:brand_id]: #{params[:brand_id]}"
-    @brand = Brand.find(params[:brand_id])
+    Rails.logger.debug "params[:brand_slug]: #{params[:brand_slug]}"
+    @brand = Brand.find_by!(slug: params[:brand_slug])
     unless @brand
       redirect_to root_path, alert: "ブランドが見つかりません。"
     end

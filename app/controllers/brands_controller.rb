@@ -9,7 +9,6 @@ class BrandsController < ApplicationController
 
   # ブランド詳細
   def show
-    @brand = Brand.find(params[:id])
     @stores = @brand.stores
   end
 
@@ -57,7 +56,12 @@ class BrandsController < ApplicationController
   private
 
   def set_brand
-    @brand = Brand.find(params[:id])
+    @brand = Brand.find_by!(slug: params[:slug])
+
+    if @brand.nil?
+      flash[:alert] = "指定されたブランドが見つかりません。"
+      redirect_to brands_path
+    end
   end
 
   # 一般管理者のアクセスを禁じる
@@ -68,6 +72,6 @@ class BrandsController < ApplicationController
   end
 
   def brand_params
-    params.require(:brand).permit(:name)
+    params.require(:brand).permit(:name, :slug)
   end
 end
