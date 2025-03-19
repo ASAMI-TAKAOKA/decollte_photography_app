@@ -1,0 +1,27 @@
+<h1>ブランド一覧（管理者向け）</h1>
+
+<!-- 新しいブランドを作成するボタン -->
+<%= link_to '新しいブランドを作成', new_brand_path, class: 'btn-primary' %>
+
+<!-- ブランドカード表示（管理者用） -->
+<div class="grid admin-brand-index">
+  <% @brands.each do |brand| %>
+    <div class="card admin-card">
+      <!-- ブランド名をリンクに修正 -->
+      <div class="h3">
+        <%= link_to brand.name, brand_path(brand) %>
+      </div>
+
+      <div>
+        <p>
+          <%= link_to 'ブランドの編集', edit_brand_path(brand) %>
+        </p>
+        <p>
+          <%= link_to 'ブランドの削除', brand_path(brand), 
+            data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, 
+            class: "btn-delete" %>
+        </p>
+      </div>
+    </div>
+  <% end %>
+</div>

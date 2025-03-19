@@ -1,31 +1,9 @@
-<!-- ブランド一覧のタイトル -->
-<h1>ブランド一覧</h1>
-
-<!-- 新しいブランドを作成するボタン -->
-<%= link_to '新しいブランドを作成', new_brand_path, class: 'btn-primary' %>
-
-<!-- ブランドカード表示 -->
-<div class="grid">
-  <% @brands.each do |brand| %>
-    <div class="card">
-      <!-- ブランド名をリンクに修正 -->
-      <div class="h3">
-        <%= link_to brand.name, brand_path(brand) %>
-      </div>
-
-      <div>
-        <p>
-          <%= link_to 'ブランドの編集', edit_brand_path(brand) %>
-        </p>
-        <p>
-          <%= link_to 'ブランドの削除', brand_path(brand), 
-            data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, 
-            class: "btn-delete" %>
-        </p>
-      </div>
-
-    </div>
-  <% end %>
-</div>
+<% if session[:admin_user] == "admin" || session[:admin_user] == "regular_admin" %>
+  <!-- 管理者用のブランド一覧 -->
+  <%= render 'admin_brand_index' %>
+<% else %>
+  <!-- 一般ユーザー用のブランド一覧 -->
+  <%= render 'general_user_brand_index' %>
+<% end %>
 
 <%= link_to '管理者専用ページ', admin_users_login_path %>
