@@ -27,7 +27,8 @@ class StoresController < ApplicationController
       render :new, status: :unprocessable_entity # Turboに対応
     else
       if @store.save
-        redirect_to brand_stores_path(@brand), notice: "店舗が作成されました。"
+        flash[:notice] = "店舗が作成されました。"
+        redirect_to brand_stores_path(@brand)
       else
         render :new, status: :unprocessable_entity # Turboに対応
       end
@@ -41,7 +42,8 @@ class StoresController < ApplicationController
   # 店舗更新
   def update
     if @store.update(store_params)
-      redirect_to brand_store_path(@brand, @store), notice: "店舗情報が更新されました。"
+      flash[:notice] = "店舗情報が更新されました。"
+      redirect_to brand_store_path(@brand, @store)
     else
       render :edit, status: :unprocessable_entity # Turboに対応
     end
@@ -50,19 +52,22 @@ class StoresController < ApplicationController
   # 店舗削除
   def destroy
     @store.destroy
-    redirect_to brand_stores_path(@brand), notice: "店舗が削除されました。"
+    flash[:notice] = "店舗が削除されました。"
+    redirect_to brand_stores_path(@brand)
   end
 
   # 上へ移動
   def move_higher
     @store.move_higher
-    redirect_to brand_stores_path(@brand), notice: "店舗の並び順を変更しました。"
+    flash[:notice] = "店舗の並び順を変更しました。"
+    redirect_to brand_stores_path(@brand)
   end
 
   # 下へ移動
   def move_lower
     @store.move_lower
-    redirect_to brand_stores_path(@brand), notice: "店舗の並び順を変更しました。"
+    flash[:notice] = "店舗の並び順を変更しました。"
+    redirect_to brand_stores_path(@brand)
   end
 
   private
@@ -72,7 +77,8 @@ class StoresController < ApplicationController
     Rails.logger.debug "params[:brand_slug]: #{params[:brand_slug]}"
     @brand = Brand.find_by!(slug: params[:brand_slug])
     unless @brand
-      redirect_to root_path, alert: "ブランドが見つかりません。"
+      flash[:alert] = "ブランドが見つかりません。"
+      redirect_to root_path
     end
   end
 
@@ -80,14 +86,16 @@ class StoresController < ApplicationController
   def set_store
     @store = @brand.stores.find(params[:id])
     unless @store
-      redirect_to brand_stores_path(@brand), alert: "店舗が見つかりません。"
+      flash[:alert] = "店舗が見つかりません。"
+      redirect_to brand_stores_path(@brand)
     end
   end
 
   # 一般管理者のアクセスを禁じる
   def prohibit_access_for_regular_admin
     unless session[:admin_user] == "admin"
-      redirect_to root_path, alert: "特権管理者のみアクセスが可能です。"
+      flash[:alert] = "特権管理者のみアクセスが可能です。"
+      redirect_to root_path
     end
   end
 

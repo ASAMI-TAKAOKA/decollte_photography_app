@@ -26,7 +26,8 @@ class BrandsController < ApplicationController
       render :new, status: :unprocessable_entity # Turboに対応
     else
       if @brand.save
-        redirect_to @brand, notice: "ブランドが作成されました。"
+        flash[:notice] = "ブランドが作成されました。"
+        redirect_to @brand
       else
         render :new, status: :unprocessable_entity # Turboに対応
       end
@@ -40,7 +41,8 @@ class BrandsController < ApplicationController
   # ブランド更新
   def update
     if @brand.update(brand_params)
-      redirect_to brands_path(@brand), notice: "ブランド情報が更新されました。"
+      flash[:notice] = "ブランド情報が更新されました。"
+      redirect_to brands_path(@brand)
     else
       render :edit
     end
@@ -67,7 +69,8 @@ class BrandsController < ApplicationController
   # 一般管理者のアクセスを禁じる
   def prohibit_access_for_regular_admin
     unless session[:admin_user] == "admin"
-      redirect_to root_path, alert: "特権管理者のみアクセスが可能です。"
+      flash[:alert] = "特権管理者のみアクセスが可能です。"
+      redirect_to root_path
     end
   end
 

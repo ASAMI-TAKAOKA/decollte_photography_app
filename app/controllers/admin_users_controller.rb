@@ -20,6 +20,7 @@ class AdminUsersController < ApplicationController
         session[:admin_user] = "regular_admin"
       end
 
+      flash[:notice] = "ログインしました。"
       redirect_to admin_dashboard_path
     else
       render :login
@@ -28,7 +29,8 @@ class AdminUsersController < ApplicationController
 
   def logout
     reset_session
-    redirect_to admin_users_login_path, notice: "ログアウトしました。"
+    flash[:notice] = "ログアウトしました。"
+    redirect_to admin_users_login_path
   end
 
 
@@ -51,7 +53,8 @@ class AdminUsersController < ApplicationController
     @admin_user.role = 0
 
     if @admin_user.save
-      redirect_to new_admin_user_path, notice: "Admin user created successfully"
+      flash[:notice] = "Admin user created successfully"
+      redirect_to new_admin_user_path
     else
       render :new, status: :unprocessable_entity # Turboに対応
     end
@@ -65,7 +68,8 @@ class AdminUsersController < ApplicationController
   def update
     @admin_user = AdminUser.find(params[:id])
     if @admin_user.update(admin_user_params)
-      redirect_to edit_admin_user_path, notice: "Admin user updated successfully"
+      flash[:notice] = "Admin user updated successfully"
+      redirect_to edit_admin_user_path
     else
       render :edit, status: :unprocessable_entity # Turboに対応
     end
@@ -75,21 +79,24 @@ class AdminUsersController < ApplicationController
   def destroy
     @admin_user = AdminUser.find(params[:id])
     @admin_user.destroy
-    redirect_to admin_users_path, notice: "Admin user destroyed successfully"
+    flash[:notice] = "Admin user destroyed successfully"
+    redirect_to admin_users_path
   end
 
   private
 
   def authenticate_admin_user
     unless session[:admin_user] == "admin" || session[:admin_user] == "regular_admin"
-      redirect_to admin_users_login_path, alert: "ログインが必要です。"
+      flash[:alert] = "ログインが必要です。"
+      redirect_to admin_users_login_path
     end
   end
 
   # 一般管理者のアクセスを禁じる
   def prohibit_access_for_regular_admin
     unless session[:admin_user] == "admin"
-      redirect_to root_path, alert: "特権管理者のみアクセスが可能です。"
+      flash[:alert] = "特権管理者のみアクセスが可能です。"
+      redirect_to root_path
     end
   end
 

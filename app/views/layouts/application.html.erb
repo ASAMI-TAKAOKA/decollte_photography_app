@@ -193,6 +193,31 @@
         color: #333; /* ブランド名は黒色 */
       }
 
+      /* フラッシュメッセージのスタイル */
+      .flash-message {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        padding: 15px;
+        border-radius: 5px;
+        color: white;
+        font-size: 16px;
+        width: 90%;
+        max-width: 500px;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .flash-message.notice {
+        background-color: #4caf50;
+      }
+
+      .flash-message.alert {
+        background-color: #f44336;
+      }
+
       /* レスポンシブ対応 */
       @media (max-width: 768px) {
         .card {
@@ -223,7 +248,7 @@
     <!-- ヘッダー部分 -->
     <header>
       <h1>
-      <%= link_to 'Decorte Photography', root_path %>
+        <%= link_to 'Decorte Photography', root_path %>
       </h1>
       <div class="header-right">
         <% if session[:admin_user] %>
