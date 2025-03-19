@@ -51,7 +51,7 @@ RSpec.describe AdminUsersController, type: :controller do
       expect {
         delete :destroy, params: { id: admin_user_to_delete.id }
       }.to change(AdminUser, :count).by(-1)
-      expect(response).to redirect_to(admin_users_super_admin_dashboard_path)
+      expect(response).to redirect_to(admin_users_path)
     end
   end
 

@@ -1,28 +1,30 @@
 class AdminUsersController < ApplicationController
+  before_action :authenticate_admin_user, except: [ :login ]
   # 一般管理者のアクセスを禁じる
-  before_action :prohibit_access_for_regular_admin, only: [ :index, :show, :new, :create, :edit, :update, :destroy, :super_admin_dashboard ]
-  # 特権管理者のアクセスを禁じる
-  before_action :prohibit_access_for_super_admin, only: [ :regular_admin_dashboard ]
+  before_action :prohibit_access_for_regular_admin, only: [ :index, :show, :new, :create, :edit, :update, :destroy ]
   before_action :set_admin_user, only: [ :show, :edit, :update, :destroy ]
 
+  def dashboard
+    @brands = Brand.all
+    @stores = Store.all
+  end
+
   def login
-    # ログインフォームが送信された場合
     if request.post?
-      # 以前のセッション情報を破棄
       reset_session
 
       username = params[:username]
       password = params[:password]
 
-      # 特権管理者ログインの処理
       if username == "admin" && password == "UMtDj4ZBv%&d@Tzh"
         session[:admin_user] = "admin"
-        redirect_to admin_users_super_admin_dashboard_path
-      # 一般管理者ログインの処理
       else
         session[:admin_user] = "regular_admin"
-        redirect_to admin_users_regular_admin_dashboard_path
       end
+
+      redirect_to admin_dashboard_path
+    else
+      render :login
     end
   end
 
@@ -31,24 +33,6 @@ class AdminUsersController < ApplicationController
     redirect_to admin_users_login_path, notice: "ログアウトしました。"
   end
 
-  # ログイン済みユーザーの権限によってリダイレクトするダッシュボードを切り替える
-  def switch_bashboard_by_role
-    if session[:admin_user] == "admin"
-      redirect_to admin_users_super_admin_dashboard_path
-    elsif session[:admin_user] == "regular_admin"
-      redirect_to admin_users_regular_admin_dashboard_path
-    else
-      redirect_to admin_users_login_path, alert: "ログインが必要です"
-    end
-  end
-
-  def super_admin_dashboard
-    @message = "特権管理者のダッシュボード"
-  end
-
-  def regular_admin_dashboard
-    @message = "一般管理者のダッシュボード"
-  end
 
   def index
     @admin_users = AdminUser.all
@@ -93,22 +77,21 @@ class AdminUsersController < ApplicationController
   def destroy
     @admin_user = AdminUser.find(params[:id])
     @admin_user.destroy
-    redirect_to admin_users_super_admin_dashboard_path, notice: "Admin user destroyed successfully"
+    redirect_to admin_users_path, notice: "Admin user destroyed successfully"
   end
 
   private
 
-  # 一般管理者のアクセスを禁じる
-  def prohibit_access_for_regular_admin
-    unless session[:admin_user] == "admin"
-      redirect_to root_path, alert: "特権管理者のみアクセスできます。"
+  def authenticate_admin_user
+    unless session[:admin_user] == "admin" || session[:admin_user] == "regular_admin"
+      redirect_to admin_users_login_path, alert: "ログインが必要です。"
     end
   end
 
-  # 特権管理者のアクセスを禁じる
-  def prohibit_access_for_super_admin
-    if session[:admin_user] == "admin"
-      redirect_to root_path, alert: "一般管理者のみアクセスできます。"
+  # 一般管理者のアクセスを禁じる
+  def prohibit_access_for_regular_admin
+    unless session[:admin_user] == "admin"
+      redirect_to root_path, alert: "特権管理者のみアクセスが可能です。"
     end
   end
 
