@@ -1,4 +1,10 @@
-<h2><%= @brand.name %> の店舗一覧（管理者向け）</h2>
+<h2><%= @brand.name %> の店舗一覧</h2>
+
+<% if session[:admin_user] == "admin" %>
+  <h2>ログインユーザーの権限: 特権管理者</h2>
+<% else %>
+  <h2>ログインユーザーの権限: 一般管理者</h2>
+<% end %>
 
 <%= link_to '新規店舗作成', new_brand_store_path(@brand), class: 'btn-primary' %>
 
