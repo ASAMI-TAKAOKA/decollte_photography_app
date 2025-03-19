@@ -1,29 +1,5 @@
 <% if session[:admin_user] == "admin" %>
-  <h2>特権管理者用のダッシュボード</h2>
-  <ul>
-    <% @brands.each do |brand| %>
-      <li>
-        <%= link_to brand.name, brand_path(brand) %>
-      </li>
-    <% end %>
-    <% @stores.each do |store| %>
-      <li>
-        <%= link_to store.name, brand_store_path(store.brand.slug, store) %>
-      </li>
-    <% end %>
-  </ul>
+  <%= render "admin_users/super_admin_dashboard" %>
 <% else %>
-  <h2>一般管理者用のダッシュボード</h2>
-  <ul>
-    <% @brands.each do |brand| %>
-      <li>
-        <%= link_to brand.name, brand_path(brand) %>
-      </li>
-    <% end %>
-    <% @stores.each do |store| %>
-      <li>
-        <%= link_to store.name, brand_store_path(store.brand.slug, store) %>
-      </li>
-    <% end %>
-  </ul>
+  <%= render "admin_users/regular_admin_dashboard" %>
 <% end %>

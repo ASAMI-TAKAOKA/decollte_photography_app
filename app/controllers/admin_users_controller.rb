@@ -5,8 +5,6 @@ class AdminUsersController < ApplicationController
   before_action :set_admin_user, only: [ :show, :edit, :update, :destroy ]
 
   def dashboard
-    @brands = Brand.all
-    @stores = Store.all
   end
 
   def login
