@@ -1,13 +1,11 @@
 <h1>ブランド一覧（一般ユーザー向け）</h1>
 
-<!-- 新しいブランドを作成するボタン -->
 <%= link_to '新しいブランドを作成', new_brand_path, class: 'btn-primary' %>
 
 <!-- ブランドカード表示（一般ユーザー用） -->
 <div class="grid general-user-brand-index">
   <% @brands.each do |brand| %>
     <div class="card general-card">
-      <!-- ブランド名をリンクに修正 -->
       <div class="h3">
         <%= link_to brand.name, brand_path(brand) %>
       </div>
