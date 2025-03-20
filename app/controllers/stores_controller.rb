@@ -1,7 +1,7 @@
 # app/controllers/stores_controller.rb
 class StoresController < ApplicationController
   before_action :set_brand
-  before_action :set_store, except: [ :index, :new, :create ]
+  before_action :set_store, except: %i[ index new create ]
   before_action :prohibit_access_for_regular_admin, only: %i[ show new create edit update destroy ]
 
   # 店舗一覧ページ
