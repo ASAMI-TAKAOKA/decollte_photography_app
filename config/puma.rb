@@ -39,3 +39,7 @@ plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]
 # Specify the PID file. Defaults to tmp/pids/server.pid in development.
 # In other environments, only set the PID file if requested.
 pidfile ENV["PIDFILE"] if ENV["PIDFILE"]
+# 初期値は2だが、Renderの公式ドキュメントに沿って4に変更
+workers ENV.fetch("WEB_CONCURRENCY") { 4 }
+
+preload_app!
