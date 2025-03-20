@@ -24,8 +24,8 @@
     <% @stores.order(:position).each do |store| %>
       <tr>
         <td>
-          <%= link_to '⬆', move_higher_brand_store_path(@brand.slug, store) %>
-          <%= link_to '⬇', move_lower_brand_store_path(@brand.slug, store) %>
+          <%= link_to '⬆', move_higher_within_brand_brand_store_path(@brand.slug, store) %>
+          <%= link_to '⬇', move_lower_within_brand_brand_store_path(@brand.slug, store) %>
         </td>
         <td><%= store.id %></td>
         <td><%= store.name %></td>

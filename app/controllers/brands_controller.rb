@@ -2,22 +2,18 @@ class BrandsController < ApplicationController
   before_action :set_brand, only: %i[ show edit update destroy ]
   before_action :prohibit_access_for_regular_admin, only: %i[ edit update destroy ]
 
-  # ブランド一覧
   def index
     @brands = Brand.all
   end
 
-  # ブランド詳細
   def show
     @stores = @brand.stores
   end
 
-  # ブランド作成フォーム
   def new
     @brand = Brand.new
   end
 
-  # ブランドを保存
   def create
     @brand = Brand.new(brand_params)
 
@@ -34,11 +30,9 @@ class BrandsController < ApplicationController
     end
   end
 
-  # ブランド編集フォーム
   def edit
   end
 
-  # ブランド更新
   def update
     if @brand.update(brand_params)
       flash[:notice] = "ブランド情報が更新されました。"
@@ -48,7 +42,6 @@ class BrandsController < ApplicationController
     end
   end
 
-  # ブランド削除
   def destroy
     @brand.destroy
     flash[:notice] = "ブランドを削除しました"

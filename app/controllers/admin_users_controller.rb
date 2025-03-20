@@ -1,6 +1,5 @@
 class AdminUsersController < ApplicationController
   before_action :authenticate_admin_user, except: %i[ login ]
-  # 一般管理者のアクセスを禁じる
   before_action :prohibit_access_for_regular_admin, only: %i[ index show new create edit update destroy ]
   before_action :set_admin_user, only: %i[ show edit update destroy ]
 
