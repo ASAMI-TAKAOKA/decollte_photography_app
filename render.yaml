@@ -12,9 +12,9 @@ services:
     buildCommand: "./bin/render-build.sh"
     startCommand: "bundle exec puma -C config/puma.rb"
     envVars:
-      - key: <%= ENV['DATABASE_URL'] %>
+      - key: DATABASE_URL
         fromDatabase:
-          name: render_app
+          name: decorte_photography_app_database
           property: connectionString
-      - key: <%= ENV['RAILS_MASTER_KEY'] %>
+      - key: RAILS_MASTER_KEY
         sync: false
