@@ -6,7 +6,7 @@ databases:
 
 services:
   - type: web
-    name: decorte_photography_app
+    name: decorte_photography_app_database
     env: ruby
     region: singapore
     buildCommand: "./bin/render-build.sh"
@@ -14,7 +14,7 @@ services:
     envVars:
       - key: <%= ENV['DATABASE_URL'] %>
         fromDatabase:
-          name: decorte_photography_app_database
+          name: render_app
           property: connectionString
       - key: <%= ENV['RAILS_MASTER_KEY'] %>
         sync: false
