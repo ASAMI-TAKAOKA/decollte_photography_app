@@ -11,11 +11,16 @@ test:
   <<: *default
   database: storage/test.sqlite3
 
+# production:
+#   <<: *default
+#   adapter: postgresql
+#   encoding: unicode
+#   pool:  <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+#   database: decorte_photography_app_database
+#   username: asami_takaoka
+#   password: <%= ENV['DB_PASSWORD'] %> # .env.productionにメモ
 production:
   <<: *default
   adapter: postgresql
   encoding: unicode
-  pool:  <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  database: decorte_photography_app_database
-  username: asami_takaoka
-  password: <%= ENV['DB_PASSWORD'] %> # .env.productionにメモ
+  pool: 5
