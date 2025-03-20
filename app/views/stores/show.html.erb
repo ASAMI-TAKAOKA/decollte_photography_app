@@ -6,5 +6,5 @@
 <p>住所: <%= @store.address %></p>
 <p>電話番号: <%= @store.phone_number %></p>
 
-<%= link_to '編集', edit_brand_store_path(@brand, @store) %> |
-<%= link_to '戻る', brand_stores_path(@brand) %>
+<%= link_to '編集', edit_brand_store_path(@brand.slug, @store) %>
+<%= link_to '戻る', brand_path(@brand) %>

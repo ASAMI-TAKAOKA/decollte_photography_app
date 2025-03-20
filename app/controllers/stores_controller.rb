@@ -1,5 +1,5 @@
 class StoresController < ApplicationController
-  before_action :set_brand, only: %i[ new create move_higher_within_brand move_lower_within_brand ]
+  before_action :set_brand, only: %i[ new create show edit update destroy move_higher_within_brand move_lower_within_brand ]
   before_action :set_store, except: %i[ index new create ]
   before_action :prohibit_access_for_regular_admin, only: %i[ show new create edit update destroy ]
 
@@ -23,7 +23,7 @@ class StoresController < ApplicationController
     else
       if @store.save
         flash[:notice] = "店舗が作成されました。"
-        redirect_to brand_stores_path(@brand)
+        redirect_to brand_path(@brand)
       else
         render :new, status: :unprocessable_entity
       end
@@ -45,7 +45,7 @@ class StoresController < ApplicationController
   def destroy
     @store.destroy
     flash[:notice] = "店舗が削除されました。"
-    redirect_to brand_stores_path(@brand)
+    redirect_to brand_path(@brand)
   end
 
   def move_higher
