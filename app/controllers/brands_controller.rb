@@ -36,7 +36,7 @@ class BrandsController < ApplicationController
   def update
     if @brand.update(brand_params)
       flash[:notice] = "ブランド情報が更新されました。"
-      redirect_to brands_path(@brand)
+      redirect_to brands_path
     else
       render :edit
     end
@@ -51,9 +51,9 @@ class BrandsController < ApplicationController
   private
 
   def set_brand
-    @brand = Brand.find_by!(slug: params[:slug])
+    @brand = Brand.find_by(slug: params[:slug])
 
-    if @brand.nil?
+    unless @brand
       flash[:alert] = "指定されたブランドが見つかりません。"
       redirect_to brands_path
     end
@@ -68,6 +68,11 @@ class BrandsController < ApplicationController
   end
 
   def brand_params
-    params.require(:brand).permit(:name, :slug)
+    if action_name == "update"
+
+      params.require(:brand).permit(:name) # slug を除外
+    else
+      params.require(:brand).permit(:name, :slug)
+    end
   end
 end
