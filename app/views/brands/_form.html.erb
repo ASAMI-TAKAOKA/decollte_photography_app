@@ -14,10 +14,17 @@
     <%= form.label "ブランド名" %>
     <%= form.text_field :name %>
   </div>
+
+  <% if @brand.new_record? %>
     <div>
-    <%= form.label "パス名" %>
-    <%= form.text_field :slug %>
-  </div>
+      <%= form.label "パス名" %>
+      <%= form.text_field :slug %>
+    </div>
+  <% else %>
+        <div>
+          パス名: <%= @brand.slug %>
+        </div>
+  <% end %>
 
   <div>
     <%= form.submit %>

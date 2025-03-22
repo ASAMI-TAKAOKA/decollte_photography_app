@@ -21,12 +21,11 @@ RSpec.describe BrandsController, type: :controller do
       expect(assigns(:stores)).to eq(brand.stores)
     end
 
-    # TODO: コード要修正
-    # it "存在しないブランドにアクセスした場合、エラーメッセージが表示されること" do
-    #   get :show, params: { slug: "non-existing-slug" }
-    #   expect(flash[:alert]).to eq("指定されたブランドが見つかりません。")
-    #   expect(response).to redirect_to(brands_path)
-    # end
+    it "存在しないブランドにアクセスした場合、エラーメッセージが表示されること" do
+      get :show, params: { slug: "non-existing-slug" }
+      expect(flash[:alert]).to eq("指定されたブランドが見つかりません。")
+      expect(response).to redirect_to(brands_path)
+    end
   end
 
   describe "GET #new" do
@@ -94,14 +93,23 @@ RSpec.describe BrandsController, type: :controller do
         session[:admin_user] = super_admin.username # 管理者としてログイン
       end
 
-      # TODO: コード要修正: slugは更新できたらだめ
-      # it "ブランド情報が更新されること" do
-      #   patch :update, params: { slug: brand.slug, brand: { name: "UpdatedBrand" } }
-      #   expect(flash[:notice]).to eq("ブランド情報が更新されました。")
-      #   expect(response).to redirect_to(brands_path)
-      #   brand.reload
-      #   expect(brand.name).to eq("UpdatedBrand")
-      # end
+      it "ブランド情報のうち、nameは更新されること" do
+        patch :update, params: { "brand" => { "name" => "UpdatedBrandName" }, "slug" => "test-brand" }
+        expect(flash[:notice]).to eq("ブランド情報が更新されました。")
+        expect(response).to redirect_to(brands_path)
+        brand.reload
+        expect(brand.name).to eq("UpdatedBrandName")
+      end
+
+      it "ブランド情報のうち、slugは更新されないこと" do
+        patch :update, params: { "brand" => { "name" => "UpdatedBrandName", "slug" => "UpdatedBrandSlug" }, "slug" => "test-brand" }
+        expect(flash[:notice]).to eq("ブランド情報が更新されました。")
+        expect(response).to redirect_to(brands_path)
+
+        brand.reload
+        expect(brand.name).to eq("UpdatedBrandName") # name は更新される
+        expect(brand.slug).to eq("test-brand") # slug は変更されていないことを確認
+      end
     end
 
     context "一般管理者の場合" do
