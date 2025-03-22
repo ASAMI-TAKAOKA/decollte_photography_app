@@ -4,6 +4,7 @@
   <thead>
     <tr>
       <th>並び順変更</th>
+      <th>global_position</th>
       <th>id</th>
       <th>店舗名</th>
       <th>住所</th>
@@ -14,9 +15,10 @@
     <% @stores.each do |store| %>
       <tr>
         <td>
-          <%= link_to '⬆', move_higher_store_path(store) %>
-          <%= link_to '⬇', move_lower_store_path(store) %>
+          <%= link_to '⬆', move_higher_global_store_path(store) %>
+          <%= link_to '⬇', move_lower_global_store_path(store) %>
         </td>
+        <td><%= store.global_position %></td>
         <td><%= store.id %></td>
         <td><%= store.name %></td>
         <td><%= store.address %></td>

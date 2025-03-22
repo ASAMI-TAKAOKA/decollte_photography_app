@@ -21,8 +21,8 @@ Rails.application.routes.draw do
   # 全店舗一覧の並び替え
   resources :stores, only: %i[index] do
     member do
-      get :move_higher
-      get :move_lower
+      get :move_higher_global
+      get :move_lower_global
     end
   end
 end
