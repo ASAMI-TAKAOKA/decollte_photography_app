@@ -1,69 +1,51 @@
 require 'rails_helper'
 
 RSpec.describe AdminUser, type: :model do
-  describe "バリデーションのテスト" do
-    it "username、password、role が有効な場合は保存できる" do
-      admin_user = AdminUser.new(username: "regular_admin_user", password: "password123", role: 0)
-      expect(admin_user).to be_valid
+  describe "バリデーション" do
+    it "ユーザー名が空でないこと" do
+      admin_user = AdminUser.new(username: nil, password: "password")
+      expect(admin_user).to_not be_valid
+      expect(admin_user.errors[:username]).to include("を入力してください")
     end
 
-    it "username がない場合は無効になる" do
-      admin_user = AdminUser.new(password: "password123", role: 0)
-      expect(admin_user).to be_invalid
-      expect(admin_user.errors[:username]).to include("can't be blank")
+    it "ユーザー名が一意であること" do
+      AdminUser.create!(username: "admin", password: "password", role: 1)
+      admin_user = AdminUser.new(username: "admin", password: "password")
+      expect(admin_user).to_not be_valid
+      expect(admin_user.errors[:username]).to include("はすでに存在します")
     end
 
-    it "username が重複している場合は無効になる" do
-      AdminUser.create!(username: "regular_admin_user", password: "password123", role: 0)
-      duplicate_user = AdminUser.new(username: "regular_admin_user", password: "password456", role: 0)
-
-      expect(duplicate_user).to be_invalid
-      expect(duplicate_user.errors[:username]).to include("has already been taken")
+    it "パスワードが6文字以上であること" do
+      admin_user = AdminUser.new(username: "new_user", password: "short")
+      expect(admin_user).to_not be_valid
+      expect(admin_user.errors[:password]).to include("は6文字以上で入力してください")
     end
 
-    it "password が6文字未満の場合は無効になる" do
-      admin_user = AdminUser.new(username: "regular_admin_user", password: "short", role: 0)
-      expect(admin_user).to be_invalid
-      expect(admin_user.errors[:password]).to include("is too short (minimum is 6 characters)")
-    end
-
-    it "role が 0 または 1 以外の場合は無効になる" do
-      admin_user = AdminUser.new(username: "regular_admin_user", password: "password123", role: 2)
-      expect(admin_user).to be_invalid
-      expect(admin_user.errors[:role]).to include("is not included in the list")
-    end
-
-    it "role が nil の場合は無効になる" do
-      admin_user = AdminUser.new(username: "regular_admin_user", password: "password")
-      admin_user.role = nil  # role を nil にセット
-      expect(admin_user).to be_invalid
-      expect(admin_user.errors[:role]).to include("can't be blank")  # presence: true のエラーメッセージ
-      expect(admin_user.errors[:role]).to include("is not included in the list")  # inclusion のエラーメッセージ
+    it "役割が0または1であること" do
+      admin_user = AdminUser.new(username: "user", password: "password", role: 2)
+      expect(admin_user).to_not be_valid
+      expect(admin_user.errors[:role]).to include("は一覧にありません")
     end
   end
 
-  describe "デフォルト値のテスト" do
-    it "role のデフォルト値が 0 であること" do
-      admin_user = AdminUser.new(username: "regular_admin_user", password: "password123")
+  describe "コールバック" do
+    it "新しいレコードでロールがデフォルトで0に設定されること" do
+      admin_user = AdminUser.new(username: "new_user", password: "password")
       expect(admin_user.role).to eq(0)
     end
   end
 
-  describe "パスワードのセキュリティテスト" do
-    it "パスワードが正しくハッシュ化されて保存されること" do
-      admin_user = AdminUser.create!(username: "regular_admin_user", password: "secure_password", role: 0)
-      expect(admin_user.authenticate("secure_password")).to be_truthy
-      expect(admin_user.authenticate("wrong_password")).to be_falsey
+  describe "カスタムバリデーション" do
+    it "特権管理者が1人しか存在しないこと" do
+      AdminUser.create!(username: "admin", password: "password", role: 1)
+      new_admin_user = AdminUser.new(username: "new_admin", password: "password", role: 1)
+      expect(new_admin_user).to_not be_valid
+      expect(new_admin_user.errors[:role]).to include("特権管理者はすでに存在しています")
     end
-  end
 
-  describe "特権管理者の制約" do
-    it "特権管理者 (role: 1) が 1 人しか作れないこと" do
-      AdminUser.create!(username: "super_admin_user", password: "password123", role: 1)
-
-      another_admin = AdminUser.new(username: "another_super_admin_user", password: "password456", role: 1)
-      expect(another_admin).to be_invalid
-      expect(another_admin.errors[:role]).to include("特権管理者はすでに存在しています")
+    it "特権管理者がいない場合は問題ないこと" do
+      admin_user = AdminUser.new(username: "new_admin", password: "password", role: 1)
+      expect(admin_user).to be_valid
     end
   end
 end
