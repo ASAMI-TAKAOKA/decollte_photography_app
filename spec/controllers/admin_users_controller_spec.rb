@@ -6,7 +6,7 @@ RSpec.describe AdminUsersController, type: :controller do
 
   describe "特権管理者(admin) のアクセス" do
     before do
-      session[:admin_user] = "admin" # 特権管理者としてログイン
+      session[:admin_user] = super_admin.username # 特権管理者としてログイン
     end
 
     it "ダッシュボードにアクセスできること" do
@@ -48,7 +48,7 @@ RSpec.describe AdminUsersController, type: :controller do
 
   describe "一般管理者(regular_admin) のアクセス" do
     before do
-      session[:admin_user] = "regular_admin" # 一般管理者としてログイン
+      session[:admin_user] = regular_admin.username # 一般管理者としてログイン
     end
 
     it "ダッシュボードにアクセスできること" do
@@ -97,13 +97,12 @@ RSpec.describe AdminUsersController, type: :controller do
       expect(response).to redirect_to(admin_dashboard_path)
     end
 
-    # TODO: コードを要修正
-    # it "間違った情報（未登録のユーザー情報）でログインできないこと" do
-    #   post :login, params: { username: "testuser", password: "wrongpassword" }
-    #   expect(session[:admin_user]).to eq("regular_admin")
-    #   expect(flash[:alert]).to eq("ログイン情報が正しくありません。")
-    #   expect(response).to redirect_to(admin_users_login_path)
-    # end
+    it "間違った情報（未登録のユーザー情報）でログインできないこと" do
+      post :login, params: { username: "testuser", password: "wrongpassword" }
+      expect(session[:admin_user]).to be_nil
+      expect(flash[:alert]).to eq("ログイン情報が正しくありません。")
+      expect(response).to redirect_to(admin_users_login_path)
+    end
   end
 
   describe "ログアウト機能" do
