@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_18_125553) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_22_143816) do
   create_table "admin_users", force: :cascade do |t|
     t.string "username"
     t.string "password_digest"
@@ -36,6 +36,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_18_125553) do
     t.integer "position"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "global_position"
     t.index ["brand_id"], name: "index_stores_on_brand_id"
     t.index ["name"], name: "index_stores_on_name", unique: true
   end
