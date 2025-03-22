@@ -16,6 +16,8 @@ class Brand < ApplicationRecord
   private
 
   def generate_slug
-    self.slug = name.parameterize if slug.blank?
+    if name.present? && slug.blank?
+      self.slug = name.parameterize
+    end
   end
 end
