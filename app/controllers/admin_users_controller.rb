@@ -13,14 +13,17 @@ class AdminUsersController < ApplicationController
       username = params[:username]
       password = params[:password]
 
-      if username == "admin" && password == "UMtDj4ZBv%&d@Tzh"
-        session[:admin_user] = "admin"
-      else
-        session[:admin_user] = "regular_admin"
-      end
+      # 管理者認証を DB に基づいて行う
+      admin_user = AdminUser.find_by(username: username)
 
-      flash[:notice] = "ログインしました。"
-      redirect_to admin_dashboard_path
+      if admin_user && admin_user.authenticate(password) # DBに保存されたユーザー情報で認証
+        session[:admin_user] = admin_user.username
+        flash[:notice] = "ログインしました。"
+        redirect_to admin_dashboard_path
+      else
+        flash[:alert] = "ログイン情報が正しくありません。"
+        redirect_to admin_users_login_path
+      end
     else
       render :login
     end
