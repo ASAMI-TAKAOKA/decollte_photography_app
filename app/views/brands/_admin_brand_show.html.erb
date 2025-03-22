@@ -13,6 +13,7 @@
   <thead>
     <tr>
       <th>並び順変更</th>
+      <th>position</th>
       <th>id</th>
       <th>店舗名</th>
       <th>住所</th>
@@ -27,6 +28,7 @@
           <%= link_to '⬆', move_higher_within_brand_brand_store_path(@brand.slug, store) %>
           <%= link_to '⬇', move_lower_within_brand_brand_store_path(@brand.slug, store) %>
         </td>
+        <td><%= store.position %></td>
         <td><%= store.id %></td>
         <td><%= store.name %></td>
         <td><%= store.address %></td>

@@ -4,7 +4,7 @@ class StoresController < ApplicationController
   before_action :prohibit_access_for_regular_admin, only: %i[ show new create edit update destroy ]
 
   def index
-    @stores = Store.order(:position)
+    @stores = Store.order(:global_position)
   end
 
   def show
@@ -48,31 +48,59 @@ class StoresController < ApplicationController
     redirect_to brand_path(@brand)
   end
 
-  def move_higher
-    @store.move_higher
+  def move_higher_global
+    store = Store.find(params[:id])
+    previous_store = Store.where("global_position < ?", store.global_position).order(global_position: :desc).first
+
+    if previous_store
+      Store.transaction do
+        swap_global_positions(store, previous_store)
+      end
+    end
+
     flash[:notice] = "店舗の順番を変更しました。"
     redirect_to stores_path
   end
 
-  def move_lower
-    @store.move_lower
+  def move_lower_global
+    store = Store.find(params[:id])
+    next_store = Store.where("global_position > ?", store.global_position).order(:global_position).first
+
+    if next_store
+      Store.transaction do
+        swap_global_positions(store, next_store)
+      end
+    end
+
     flash[:notice] = "店舗の順番を変更しました。"
     redirect_to stores_path
   end
 
+  # ブランド内で上に移動
   def move_higher_within_brand
-    @store.move_higher # acts_as_list の move_higher を使用
+    store = Store.find(params[:id])
+    store.move_higher
+
     flash[:notice] = "店舗の順番を変更しました。"
-    redirect_to brand_stores_path
+    redirect_to brand_path(@brand.slug)
   end
 
+  # ブランド内で下に移動
   def move_lower_within_brand
-    @store.move_lower # acts_as_list の move_lower を使用
+    store = Store.find(params[:id])
+    store.move_lower
+
     flash[:notice] = "店舗の順番を変更しました。"
-    redirect_to brand_stores_path
+    redirect_to brand_path(@brand.slug)
   end
 
   private
+
+  def swap_global_positions(store1, store2)
+    store1_global_position = store1.global_position
+    store1.update!(global_position: store2.global_position)
+    store2.update!(global_position: store1_global_position)
+  end
 
   def set_brand
     if params[:brand_slug]
