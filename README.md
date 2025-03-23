@@ -44,9 +44,8 @@
 - rubocop（コード整形）
   
 ### ER図
-<div align="center">
-<img width="1014" alt="ER" src="">
-</div>
+<img width="1665" alt="ER図" src="https://github.com/user-attachments/assets/9b401e4b-6e51-430d-bfcb-e57bdc6eab6a">
+
 
 # 画面一覧
 #### トップページ（ブランド一覧画面）
