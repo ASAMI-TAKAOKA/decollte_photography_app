@@ -2,9 +2,10 @@
 <img width="1670" alt="トップビュー" src="https://github.com/user-attachments/assets/78a6b951-087d-40ec-b48a-0e1194c4f1be">
 <img width="1670" alt="トップビュー" src="https://github.com/user-attachments/assets/81c7657d-6e11-48eb-999e-0846d4d41541">
 
+## 概要
+技術課題のアプリケーションです。
 
 # 仕様
-
 #### トップページ
   - ブランド一覧(名前のみでよい)を表示する
     - 名前はリンクになっており、下に記すブランドの店舗一覧ページに遷移する
@@ -42,10 +43,6 @@
 
 #### その他
 - rubocop（コード整形）
-  
-### ER図
-<img width="1665" alt="ER図" src="https://github.com/user-attachments/assets/9b401e4b-6e51-430d-bfcb-e57bdc6eab6a">
-
 
 # 画面一覧
 #### トップページ（ブランド一覧画面）
@@ -74,3 +71,26 @@
 <img width="1665" alt="全店舗一覧" src="https://github.com/user-attachments/assets/e5d9f601-8107-48ab-9af2-6e9f264dc576">
 <img width="1665" alt="全店舗一覧" src="https://github.com/user-attachments/assets/e20466ca-8603-4599-8b33-e2c81dfef876">
 <img width="1665" alt="全店舗一覧" src="https://github.com/user-attachments/assets/36d10726-b7c8-4b2e-8860-cd66f4381b72">
+
+### ER図
+<img width="1665" alt="ER図" src="https://github.com/user-attachments/assets/9b401e4b-6e51-430d-bfcb-e57bdc6eab6a">
+
+# セットアップ手順
+1. リポジトリをクローン
+```
+git clone https://github.com/ASAMI-TAKAOKA/decollte_photography_app.git
+cd decollte_photography_app
+bundle install
+```
+
+2. データベースのセットアップ
+```
+bin/rails db:create db:migrate db:seed
+※SQLite3がインストールされていない場合は、「brew install sqlite3」を実行してください。
+```
+
+3. サーバー起動
+```
+bin/rails s
+※http://localhost:3000 にアクセスしていただき、ご確認いただけますと幸いです。
+```
