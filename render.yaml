@@ -1,12 +1,12 @@
 databases:
-  - name: decorte_photography_app_database
-    databaseName: decorte_photography_app_database
+  - name: decollte_photography_app_database
+    databaseName: decollte_photography_app_database
     user: asami_takaoka
     region: singapore
 
 services:
   - type: web
-    name: decorte_photography_app_database
+    name: decollte_photography_app_database
     env: ruby
     region: singapore
     buildCommand: "./bin/render-build.sh"

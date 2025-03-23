@@ -16,7 +16,7 @@ test:
 #   adapter: postgresql
 #   encoding: unicode
 #   pool:  <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-#   database: decorte_photography_app_database
+#   database: decollte_photography_app_database
 #   username: asami_takaoka
 #   password: <%= ENV['DB_PASSWORD'] %> # .env.productionにメモ
 production:

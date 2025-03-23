@@ -6,7 +6,7 @@ require "rails/all"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module DecortePhotographyApp
+module DecolltePhotographyApp
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.0
@@ -17,7 +17,7 @@ module DecortePhotographyApp
     config.autoload_lib(ignore: %w[assets tasks])
     config.i18n.default_locale = :ja
     # デプロイするサービスのホストを追加する
-    config.hosts << "decorte-photography-app.onrender.com"
+    config.hosts << "decollte-photography-app.onrender.com"
 
     # Configuration for the application, engines, and railties goes here.
     #
