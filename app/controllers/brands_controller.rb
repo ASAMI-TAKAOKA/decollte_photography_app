@@ -17,6 +17,8 @@ class BrandsController < ApplicationController
   def create
     @brand = Brand.new(brand_params)
 
+    # (Review)
+    # この条件分岐は、不要ではないですか？バリデーションで同じ名前のブランドが登録されないようにしているので、この条件分岐は不要です。
     if Brand.exists?(name: @brand.name)
       flash[:alert] = "#{@brand.name}というブランド名はすでに存在します。"
       render :new, status: :unprocessable_entity # Turboに対応
@@ -53,6 +55,9 @@ class BrandsController < ApplicationController
   def set_brand
     @brand = Brand.find_by(slug: params[:slug])
 
+    # (Review)
+    # 不要な実装ではないですか？
+    # Brand.find_by!(slug: params[:slug]) と実装すればHTTPステータス404が返されます。 それで十分だと思います。
     unless @brand
       flash[:alert] = "指定されたブランドが見つかりません。"
       redirect_to brands_path
@@ -68,6 +73,8 @@ class BrandsController < ApplicationController
   end
 
   def brand_params
+    # (Review)
+    # updateアクションの場合、slugを除外する必要ありますか？
     if action_name == "update"
 
       params.require(:brand).permit(:name) # slug を除外
