@@ -37,6 +37,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_22_143816) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "global_position"
+    # (Review)
+    # この行は不要ではないですか？ 順番の状態を２つ持つことより、positionを有効に使いましょう！
+    # これがたいしたことない機能を必要以上に複雑にしている感じがします。
     t.index ["brand_id"], name: "index_stores_on_brand_id"
     t.index ["name"], name: "index_stores_on_name", unique: true
   end
