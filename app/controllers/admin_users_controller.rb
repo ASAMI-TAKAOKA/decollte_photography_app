@@ -36,7 +36,7 @@ class AdminUsersController < ApplicationController
   end
 
   # (Review)
-  # 6行目から36行目までのコードは、　このコントローラにあるべきではないです。このコントローラは管理者のCRUD操作を行うためのコントローラです。
+  # 6行目から36行目までのコードは、このコントローラにあるべきではないです。このコントローラは管理者のCRUD操作を行うためのコントローラです。
 
   def index
     @admin_users = AdminUser.all
@@ -60,7 +60,7 @@ class AdminUsersController < ApplicationController
       flash[:notice] = "Admin user created successfully"
       redirect_to new_admin_user_path
       # (Review)
-      # このリダイレクト先は、管理者作成ページではなく、一般管理者一覧ページにすべきです。
+      # このリダイレクト先は、管理者作成ページではなく、管理者一覧ページにすべきです。
     else
       render :new, status: :unprocessable_entity # Turboに対応
     end
@@ -77,7 +77,7 @@ class AdminUsersController < ApplicationController
       flash[:notice] = "Admin user updated successfully"
       redirect_to edit_admin_user_path
       # (Review)
-      # create, updateアクションすべてですが、リダイレクト先が間違っています。正しいリダイレクト先は、一般管理者一覧ページにすべきです。
+      # create, updateアクションすべてですが、リダイレクト先が間違っています。正しいリダイレクト先は、管理者一覧ページにすべきです。
     else
       render :edit, status: :unprocessable_entity # Turboに対応
     end
@@ -85,14 +85,14 @@ class AdminUsersController < ApplicationController
 
   # 管理者の削除
   # (Review)
-  # すべてのユーザを削除でき　てしまいます。最後のユーザが削除されるとログインできなくなりますので管理者が一人しかいない場合は削除できないようにする必要があります。
+  # すべてのユーザを削除できてしまいます。最後のユーザが削除されるとログインできなくなりますので管理者が一人しかいない場合は削除できないようにする必要があります。
   def destroy
     @admin_user = AdminUser.find(params[:id])
     @admin_user.destroy
     flash[:notice] = "Admin user destroyed successfully"
     redirect_to admin_users_path
     # (Review)
-    # create, update, destroyアクションすべてですが、redirect_toメソッドは、引数にflashメッセージを渡すことができます。このように書くことで、flashメッセージが表示されます。
+    # create, update, destroyアクションすべてですが、redirect_toメソッドは、引数にflashメッセージを渡すことができます。このように書くことで、flashメッセージが表示されます。(あとメッセージは日本語にした方がわかりやすいです)
     # redirect_to admin_users_path, notice: "Admin user destroyed successfully"
   end
 
