@@ -48,6 +48,10 @@ class StoresController < ApplicationController
     redirect_to brand_path(@brand)
   end
 
+  # (Review)
+  # ここ以降の `move_` がプレフィックスに付いている並び替えを行うためのアクションは、別のコントローラで実装した方がよいです。
+  # このコントローラは店舗のCRUD操作を行うためのコントローラです。それ以外の処理は別のコントローラで実装しましょう。
+  # またこの手のロジックはコントローラではなく、モデルに実装するべきです。
   def move_higher_global
     store = Store.find(params[:id])
     previous_store = Store.where("global_position < ?", store.global_position).order(global_position: :desc).first
@@ -103,6 +107,10 @@ class StoresController < ApplicationController
   end
 
   def set_brand
+    # (Review)
+    # ここはロジックがめちゃくちゃです。
+    # そもそもfind_by!で見つからなかった場合は例外が発生しますので、else文内の処理は実行されません
+    # この１行だけあれば済むと思います。 @brand = Brand.find_by!(slug: params[:brand_slug])
     if params[:brand_slug]
       @brand = Brand.find_by!(slug: params[:brand_slug])
     else
