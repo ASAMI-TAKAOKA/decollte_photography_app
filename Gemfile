@@ -74,3 +74,13 @@ group :production do
   gem "pg"
   gem "dotenv-rails"
 end
+
+# (Review)
+# 本当に使うGemだけ記載して不要なGemは削除してください。ソースコードをチェックしなくても以下は明らかに使ってないことがわかります。
+#
+# - jbuilder
+# - solid_cache
+# - solid_queue
+# - solid_cable
+# - kamal
+
