@@ -248,11 +248,11 @@
     <!-- ヘッダー部分 -->
     <header>
       <h1>
-        <%= link_to 'Decollte Photography', root_path %>
+        <%= link_to 'Decollte Photography', session[:admin_role].in?([0, 1]) ? admin_dashboards_path : root_path %>
       </h1>
       <div class="header-right">
-        <% if session[:admin_user] %>
-          <%= button_to 'ログアウト', admin_users_logout_path, method: :delete, data: { confirm: 'ログアウトしますか？' }, class: 'header-btn' %>
+        <% if session[:admin_role].in?([0, 1]) %>
+          <%= button_to 'ログアウト', admin_session_path, method: :delete, data: { confirm: 'ログアウトしますか？' }, class: 'header-btn' %>
         <% end %>
       </div>
     </header>
