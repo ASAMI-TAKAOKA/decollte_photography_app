@@ -1,0 +1,24 @@
+<% content_for :title, "全店舗一覧" %>
+<h2>全店舗一覧</h2>
+<table>
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>店舗名</th>
+      <th>住所</th>
+      <th>電話番号</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @stores.order(position: :asc).each do |store| %>
+      <tr>
+        <td><%= store.id %></td>
+        <td><%= store.name %></td>
+        <td><%= store.address %></td>
+        <td><%= store.phone_number %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'ダッシュボードへ戻る', admin_dashboards_path %>

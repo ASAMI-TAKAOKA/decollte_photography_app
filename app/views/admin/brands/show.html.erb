@@ -1,0 +1,47 @@
+<h2><%= @brand.name %> の店舗一覧</h2>
+
+<% if session[:admin_role] == 1 %>
+  <h2>ログインユーザーの権限: 特権管理者</h2>
+<% else %>
+  <h2>ログインユーザーの権限: 一般管理者</h2>
+<% end %>
+
+<%= link_to '新規店舗作成', new_admin_brand_store_path(@brand), class: 'btn-primary' %>
+
+<!-- ブランドに紐づく店舗一覧 -->
+<table>
+  <thead>
+    <tr>
+      <th>並び順変更</th>
+      <th>position</th>
+      <th>id</th>
+      <th>店舗名</th>
+      <th>住所</th>
+      <th>電話番号</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @stores.order(:position).each do |store| %>
+      <tr>
+        <td>
+          <%= link_to '⬆', admin_brand_store_path(@brand.slug, store, store: { direction: "higher" }), data: { turbo_method: :patch }, class: "btn btn-primary" %>
+          <%= link_to '⬇', admin_brand_store_path(@brand.slug, store, store: { direction: "lower" }), data: { turbo_method: :patch }, class: "btn btn-primary" %>
+        </td>
+        <td><%= store.position %></td>
+        <td><%= store.id %></td>
+        <td><%= store.name %></td>
+        <td><%= store.address %></td>
+        <td><%= store.phone_number %></td>
+
+        <td>
+          <%= link_to '詳細', admin_brand_store_path(@brand, store) %>
+          <%= link_to '編集', edit_admin_brand_store_path(@brand, store) %>
+          <%= link_to '削除', admin_brand_store_path(@brand, store), data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'ブランド一覧へ戻る', admin_brands_path, class: 'btn-primary' %>

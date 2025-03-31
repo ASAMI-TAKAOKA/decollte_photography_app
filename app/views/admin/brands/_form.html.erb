@@ -1,0 +1,32 @@
+<%= form_with model: @brand, url: @brand.new_record? ? admin_brands_path : admin_brand_path(@brand), method: @brand.new_record? ? :post : :patch do |form| %>
+  <% if @brand.errors.any? %>
+    <div style="color: red">
+      <h2><%= t("errors.template.header", model: @brand.model_name.human, count: @brand.errors.count) %></h2>
+      <ul>
+        <% @brand.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label "ブランド名" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <% if @brand.new_record? %>
+    <div>
+      <%= form.label "パス名" %>
+      <%= form.text_field :slug %>
+    </div>
+  <% else %>
+        <div>
+          パス名: <%= @brand.slug %>
+        </div>
+  <% end %>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
