@@ -1,12 +1,27 @@
 ---
 ja:
   activerecord:
+    models:
+      admin_user: 管理者
+      brand: ブランド
+      store: 店舗
     errors:
       messages:
         record_invalid: 'バリデーションに失敗しました: %{errors}'
         restrict_dependent_destroy:
           has_one: "%{record}が存在しているので削除できません"
           has_many: "%{record}が存在しているので削除できません"
+    attributes:
+      admin_user:
+        password: パスワード
+        username: ユーザー名
+      brand:
+        name: ブランド名
+        slug: パス
+      store:
+        name: 名前
+        address: 住所
+        phone_number: 電話番号
   date:
     abbr_day_names:
     - 日
