@@ -13,7 +13,7 @@ Rails.application.routes.draw do
     end
 
     # ブランドに紐づかない店舗一覧
-    resources :stores, only: [ :index ]
+    resources :stores, only: [ :index, :update ]
   end
 
   # 一般ユーザー向けのブランド一覧、ブランド詳細

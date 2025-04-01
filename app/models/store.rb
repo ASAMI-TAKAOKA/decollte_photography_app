@@ -7,7 +7,13 @@ class Store < ApplicationRecord
   validates :address, presence: true
   validates :phone_number, presence: true
 
-  def move_within_brand(direction)
+  def move(direction, scope_type: :brand)
+    scoped_stores = case scope_type
+                    when :brand then Store.where(brand_id: brand_id).order(:position)
+                    when :all then Store.all.order(:position)
+                    else raise ArgumentError, "Invalid scope_type: #{scope_type}"
+                    end
+
     case direction
     when :higher
       move_higher
@@ -17,4 +23,5 @@ class Store < ApplicationRecord
       raise ArgumentError, "Invalid direction: #{direction}"
     end
   end
+
 end
