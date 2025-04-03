@@ -32,7 +32,7 @@ class Admin::BrandsController < ApplicationController
     if @brand.update(brand_params)
       redirect_to admin_brands_path, notice: "ブランド情報が更新されました。"
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
