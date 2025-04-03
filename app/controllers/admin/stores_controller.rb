@@ -1,8 +1,8 @@
 class Admin::StoresController < ApplicationController
   before_action :check_login
-  before_action :set_brand, only: %i[new create show edit update destroy ]
-  before_action :set_store, only: %i[show edit update destroy]
-  before_action :prohibit_access_for_regular_admin, only: %i[show new create edit destroy]
+  before_action :set_brand, only: %i[ new create show edit update destroy ]
+  before_action :set_store, only: %i[ show edit update destroy ]
+  before_action :prohibit_access_for_regular_admin, only: %i[ show new create edit destroy ]
 
   def index
     @stores = Store.all
