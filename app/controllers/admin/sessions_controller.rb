@@ -1,9 +1,17 @@
 class Admin::SessionsController < ApplicationController
   def new
-    render :new
+    if session[:admin_user_id].present?
+      redirect_to admin_dashboards_path, notice: "すでにログインしています。"
+    else
+      render :new
+    end
   end
 
   def create
+    if session[:admin_user_id].present?
+      redirect_to admin_dashboards_path, notice: "すでにログインしています。"
+      return
+    end
     # 管理者認証を DB に基づいて行う
     admin_user = AdminUser.find_by(username: params[:username])
 
