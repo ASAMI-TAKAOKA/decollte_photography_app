@@ -3,7 +3,7 @@ class Store < ApplicationRecord
 
   acts_as_list scope: :brand
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
   validates :address, presence: true
   validates :phone_number, presence: true
 

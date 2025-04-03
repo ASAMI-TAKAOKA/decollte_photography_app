@@ -18,10 +18,7 @@ class Admin::StoresController < ApplicationController
   def create
     @store = @brand.stores.build(store_params)
 
-    if Store.exists?(name: @store.name)
-      flash[:alert] = "#{@store.name}という店舗名はすでに存在します。"
-      render :new, status: :unprocessable_entity
-    elsif @store.save
+    if @store.save
       redirect_to admin_brand_path(@brand), notice: "店舗が作成されました。"
     else
       render :new, status: :unprocessable_entity
