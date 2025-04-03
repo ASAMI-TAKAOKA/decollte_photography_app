@@ -55,11 +55,6 @@ class Admin::BrandsController < ApplicationController
   end
 
   def brand_params
-    if action_name == "update"
-
-      params.require(:brand).permit(:name) # slug を除外（仕様に「ブランド作成後のパスの変更は不可」 と記載があったため、updateアクションでslugを更新できないようにしています。）
-    else
-      params.require(:brand).permit(:name, :slug)
-    end
+    params.require(:brand).permit(:name, :slug)
   end
 end
