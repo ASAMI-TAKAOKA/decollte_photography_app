@@ -4,7 +4,7 @@ class Admin::BrandsController < ApplicationController
   before_action :prohibit_access_for_regular_admin, only: %i[ edit update destroy ]
 
   def index
-    @brands = Brand.all
+    @brands = Brand.order(:created_at)
   end
 
   def show
