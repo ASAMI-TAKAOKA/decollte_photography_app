@@ -8,7 +8,6 @@ class Admin::AdminUsersController < ApplicationController
   end
 
   def show
-    @admin_user = AdminUser.find(params[:id])
   end
 
   # 一般管理者作成ページを表示
@@ -34,7 +33,6 @@ class Admin::AdminUsersController < ApplicationController
 
   # 一般管理者情報を更新
   def update
-    @admin_user = AdminUser.find(params[:id])
     if @admin_user.update(admin_user_params)
       redirect_to admin_admin_users_path, notice: "一般管理者情報を更新しました。"
     else
@@ -44,8 +42,6 @@ class Admin::AdminUsersController < ApplicationController
 
   # 管理者の削除
   def destroy
-    @admin_user = AdminUser.find(params[:id])
-
     # 管理者ユーザーが1人しかいない場合は削除できないようにする
     if AdminUser.count == 1
       redirect_to admin_users_path, notice: "最後の管理者は削除できません。" and return
