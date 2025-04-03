@@ -1,6 +1,6 @@
 class Brand < ApplicationRecord
   before_validation :generate_slug, on: :create
-  validate :slug_cannot_be_changed, if: :will_save_change_to_slug?
+  validate :slug_cannot_be_changed, if: :saved_change_to_slug?
   has_many :stores, dependent: :destroy
   # 作成時のみ設定可能となり、一度保存すると変更できなくなる。
   # updateメソッドを使っても更新されない。
