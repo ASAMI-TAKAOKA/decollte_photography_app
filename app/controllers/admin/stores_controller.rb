@@ -1,5 +1,5 @@
 class Admin::StoresController < ApplicationController
-  before_action :authenticate_admin_user
+  before_action :check_login
   before_action :set_brand, only: %i[new create show edit update destroy ]
   before_action :set_store, only: %i[show edit update destroy]
   before_action :prohibit_access_for_regular_admin, only: %i[show new create edit destroy]
@@ -80,12 +80,5 @@ class Admin::StoresController < ApplicationController
 
   def store_params
     params.require(:store).permit(:name, :address, :phone_number, :direction, :scope_type)
-  end
-
-  # session[:admin_role] の値が 0 または 1 の場合のみログインを許可する
-  def authenticate_admin_user
-    unless session[:admin_role].in?([0, 1])
-      redirect_to new_admin_session_path, alert: "ログインが必要です。"
-    end
   end
 end

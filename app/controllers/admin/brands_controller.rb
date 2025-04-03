@@ -1,5 +1,5 @@
 class Admin::BrandsController < ApplicationController
-  before_action :authenticate_admin_user
+  before_action :check_login
   before_action :set_brand, only: %i[ show edit update destroy ]
   before_action :prohibit_access_for_regular_admin, only: %i[ edit update destroy ]
 
@@ -60,13 +60,6 @@ class Admin::BrandsController < ApplicationController
       params.require(:brand).permit(:name) # slug を除外（仕様に「ブランド作成後のパスの変更は不可」 と記載があったため、updateアクションでslugを更新できないようにしています。）
     else
       params.require(:brand).permit(:name, :slug)
-    end
-  end
-
-  # session[:admin_role] の値が 0 または 1 の場合のみログインを許可する
-  def authenticate_admin_user
-    unless session[:admin_role].in?([ 0, 1 ])
-      redirect_to new_admin_session_path, alert: "ログインが必要です。"
     end
   end
 end
