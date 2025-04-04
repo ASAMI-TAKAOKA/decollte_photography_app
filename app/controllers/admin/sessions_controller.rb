@@ -1,6 +1,6 @@
 class Admin::SessionsController < ApplicationController
   def new
-    if session[:admin_user_id].present?
+    if admin_logged_in?
       redirect_to admin_root_path, notice: "すでにログインしています。"
     else
       render :new
@@ -8,7 +8,7 @@ class Admin::SessionsController < ApplicationController
   end
 
   def create
-    if session[:admin_user_id].present?
+    if admin_logged_in?
       redirect_to admin_root_path, notice: "すでにログインしています。"
       return
     end

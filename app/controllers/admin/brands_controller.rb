@@ -49,7 +49,7 @@ class Admin::BrandsController < ApplicationController
 
   # 一般管理者のアクセスを禁じる
   def prohibit_access_for_regular_admin
-    unless session[:admin_role] == 1
+    unless super_admin?
       redirect_to admin_root_path, alert: "特権管理者のみアクセスが可能です。"
     end
   end

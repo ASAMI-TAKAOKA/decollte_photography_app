@@ -1,6 +1,6 @@
 <h2><%= @brand.name %> の店舗一覧</h2>
 
-<% if session[:admin_role] == 1 %>
+<% if super_admin? %>
   <h2>ログインユーザーの権限: 特権管理者</h2>
 <% else %>
   <h2>ログインユーザーの権限: 一般管理者</h2>
