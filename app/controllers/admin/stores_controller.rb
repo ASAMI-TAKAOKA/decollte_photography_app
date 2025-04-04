@@ -62,7 +62,7 @@ class Admin::StoresController < ApplicationController
   def set_brand
     return if params[:store]&.dig(:scope_type) == "all" # scope_type が all の場合は @brand をセットしない
 
-    @brand = Brand.find_by!(slug: params[:brand_slug])
+    @brand = Brand.find_by!(slug: params[:id]) # idではなくslugでブランドを特定する
   end
 
   def set_store

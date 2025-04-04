@@ -44,7 +44,7 @@ class Admin::BrandsController < ApplicationController
   private
 
   def set_brand
-    @brand = Brand.find_by(slug: params[:slug])
+    @brand = Brand.find_by!(slug: params[:id]) # idではなくslugでブランドを特定する
   end
 
   # 一般管理者のアクセスを禁じる

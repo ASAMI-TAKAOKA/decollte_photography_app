@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     resource :dashboards, only: %i[ show ], path: "" # /admin
 
     # ブランド・店舗管理
-    resources :brands, param: :slug do
+    resources :brands do
       resources :stores
     end
 
@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   end
 
   # 一般ユーザー向けのブランド一覧、ブランド詳細
-  resources :brands, only: %i[ index show ], param: :slug
+  resources :brands, only: %i[ index show ]
 
   # 一般ユーザー向けの店舗一覧
   resources :stores, only: %i[ index ]
