@@ -1,5 +1,5 @@
 class Store < ApplicationRecord
-  belongs_to :brand, optional: true
+  belongs_to :brand
 
   acts_as_list scope: :brand
 
