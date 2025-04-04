@@ -1,6 +1,6 @@
 <h1>ブランド一覧</h1>
 
-<% if session[:admin_role] == 1 %>
+<% if super_admin? %>
   <h2>ログインユーザーの権限: 特権管理者</h2>
 <% else %>
   <h2>ログインユーザーの権限: 一般管理者</h2>
@@ -30,4 +30,4 @@
     </div>
   <% end %>
 </div>
-<%= link_to 'ダッシュボードに戻る', admin_dashboards_path %>
+<%= link_to 'ダッシュボードに戻る', admin_root_path %>
