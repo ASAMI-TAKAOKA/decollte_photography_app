@@ -5,7 +5,7 @@ class Admin::StoresController < ApplicationController
   before_action :prohibit_access_for_regular_admin, only: %i[ show new create edit destroy ]
 
   def index
-    @stores = Store.all
+    @stores = Store.order(:position)
   end
 
   def show

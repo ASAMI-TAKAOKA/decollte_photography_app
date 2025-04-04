@@ -12,7 +12,7 @@
     </tr>
   </thead>
   <tbody>
-    <% @stores.order(:position).each do |store| %>
+    <% @stores.each do |store| %>
       <tr>
         <td><%= store.id %></td>
         <td><%= store.name %></td>

@@ -8,7 +8,7 @@ class Admin::BrandsController < ApplicationController
   end
 
   def show
-    @stores = @brand.stores
+    @stores = @brand.stores.order(:position)
   end
 
   def new
