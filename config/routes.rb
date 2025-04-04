@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resource :session, only: %i[ new create destroy ] # ログイン・ログアウト用
     resources :admin_users
-    resource :dashboards, only: %i[ show ], path: "" # /admin
+    root to: 'dashboards#show'
 
     # ブランド・店舗管理
     resources :brands do

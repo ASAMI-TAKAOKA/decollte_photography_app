@@ -41,7 +41,7 @@ class Admin::StoresController < ApplicationController
 
     # 権限チェック
     unless session[:admin_role] == 1
-      redirect_to admin_dashboards_path, alert: "特権管理者のみアクセスが可能です。" and return
+      redirect_to admin_root_path, alert: "特権管理者のみアクセスが可能です。" and return
     end
 
     # 店舗情報の更新処理
@@ -71,7 +71,7 @@ class Admin::StoresController < ApplicationController
 
   def prohibit_access_for_regular_admin
     unless session[:admin_role] == 1
-      redirect_to admin_dashboards_path, alert: "特権管理者のみアクセスが可能です。"
+      redirect_to admin_root_path, alert: "特権管理者のみアクセスが可能です。"
     end
   end
 

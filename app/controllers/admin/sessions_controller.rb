@@ -1,7 +1,7 @@
 class Admin::SessionsController < ApplicationController
   def new
     if session[:admin_user_id].present?
-      redirect_to admin_dashboards_path, notice: "すでにログインしています。"
+      redirect_to admin_root_path, notice: "すでにログインしています。"
     else
       render :new
     end
@@ -9,7 +9,7 @@ class Admin::SessionsController < ApplicationController
 
   def create
     if session[:admin_user_id].present?
-      redirect_to admin_dashboards_path, notice: "すでにログインしています。"
+      redirect_to admin_root_path, notice: "すでにログインしています。"
       return
     end
     # 管理者認証を DB に基づいて行う
@@ -19,7 +19,7 @@ class Admin::SessionsController < ApplicationController
       session[:admin_user_id] = admin_user.id
       session[:admin_role] = admin_user.role # 0: 一般管理者, 1: 特権管理者
 
-      redirect_to admin_dashboards_path, notice: "ログインしました。"
+      redirect_to admin_root_path, notice: "ログインしました。"
     else
       redirect_to new_admin_session_path, alert: "ログイン情報が正しくありません。"
     end

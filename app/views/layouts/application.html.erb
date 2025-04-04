@@ -248,7 +248,7 @@
     <!-- ヘッダー部分 -->
     <header>
       <h1>
-        <%= link_to 'Decollte Photography', session[:admin_role].in?([0, 1]) ? admin_dashboards_path : root_path %>
+        <%= link_to 'Decollte Photography', session[:admin_role].in?([0, 1]) ? admin_root_path : root_path %>
       </h1>
       <div class="header-right">
         <% if session[:admin_role].in?([0, 1]) %>

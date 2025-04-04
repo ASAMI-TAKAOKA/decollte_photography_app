@@ -32,7 +32,7 @@ RSpec.describe Admin::StoresController, type: :controller do
 
       it "店舗詳細ページにアクセスできないこと" do
         get :edit, params: { brand_slug: brand.slug, id: store.id }
-        expect(response).to redirect_to(admin_dashboards_path)
+        expect(response).to redirect_to(admin_root_path)
         expect(flash[:alert]).to eq("特権管理者のみアクセスが可能です。")
       end
     end
@@ -54,7 +54,7 @@ RSpec.describe Admin::StoresController, type: :controller do
 
       it "店舗作成ページにアクセスできないこと" do
         get :edit, params: { brand_slug: brand.slug, id: store.id }
-        expect(response).to redirect_to(admin_dashboards_path)
+        expect(response).to redirect_to(admin_root_path)
         expect(flash[:alert]).to eq("特権管理者のみアクセスが可能です。")
       end
     end
@@ -96,7 +96,7 @@ RSpec.describe Admin::StoresController, type: :controller do
       it "店舗作成ページにアクセスできないこと" do
         get :new, params: { "brand_slug" => brand.slug }
         expect(flash[:alert]).to eq("特権管理者のみアクセスが可能です。")
-        expect(response).to redirect_to(admin_dashboards_path)
+        expect(response).to redirect_to(admin_root_path)
       end
     end
   end
@@ -117,7 +117,7 @@ RSpec.describe Admin::StoresController, type: :controller do
 
       it "店舗編集ページにアクセスできないこと" do
         get :edit, params: { brand_slug: brand.slug, id: store.id }
-        expect(response).to redirect_to(admin_dashboards_path)
+        expect(response).to redirect_to(admin_root_path)
         expect(flash[:alert]).to eq("特権管理者のみアクセスが可能です。")
       end
     end
@@ -159,7 +159,7 @@ RSpec.describe Admin::StoresController, type: :controller do
 
       it "店舗情報更新ページにアクセスできないこと" do
         patch :update, params: { brand_slug: brand.slug, id: store.id, store: { name: "UpdatedStoreName" } }
-        expect(response).to redirect_to(admin_dashboards_path)
+        expect(response).to redirect_to(admin_root_path)
         expect(flash[:alert]).to eq("特権管理者のみアクセスが可能です。")
       end
     end
@@ -183,7 +183,7 @@ RSpec.describe Admin::StoresController, type: :controller do
 
       it "店舗削除ページにアクセスできないこと" do
         delete :destroy, params: { brand_slug: brand.slug, id: store.id }
-        expect(response).to redirect_to(admin_dashboards_path)
+        expect(response).to redirect_to(admin_root_path)
         expect(flash[:alert]).to eq("特権管理者のみアクセスが可能です。")
       end
     end
