@@ -44,7 +44,7 @@ class Admin::AdminUsersController < ApplicationController
   def destroy
     # 管理者ユーザーが1人しかいない場合は削除できないようにする
     if AdminUser.count == 1
-      redirect_to admin_users_path, notice: "最後の管理者は削除できません。" and return
+      redirect_to admin_admin_users_path, alert: "最後の管理者は削除できません。" and return
     end
 
     @admin_user.destroy
