@@ -7,9 +7,12 @@ RSpec.describe Admin::AdminUsersController, type: :controller do
   # 特権管理者(admin)のアクセス
   describe "特権管理者(admin) のアクセス" do
     before do
-      # ログインチェックをモックして常に通過させる
+      # ログインチェックをモックして、trueを返すようにする
       allow(controller).to receive(:check_login).and_return(true)
-      session[:admin_role] = 1  # 特権管理者ロール
+      # 特権管理者判定をモックして、trueを返すようにする
+      allow(controller).to receive(:super_admin?).and_return(true)
+      # session[:admin_role] をモックして、1を返すようにする
+      allow(controller).to receive(:session).and_return({ admin_role: 1 })
     end
 
     it "管理者一覧ページにアクセスできること" do
@@ -62,9 +65,12 @@ RSpec.describe Admin::AdminUsersController, type: :controller do
   # 一般管理者(regular_admin)のアクセス
   describe "一般管理者(regular_admin) のアクセス" do
     before do
-      # ログインチェックをモックして常に通過させる
+      # ログインチェックをモックして、trueを返すようにする
       allow(controller).to receive(:check_login).and_return(true)
-      session[:admin_role] = 0  # 一般管理者ロール
+      # 一般管理者判定をモックして、trueを返すようにする
+      allow(controller).to receive(:regular_admin?).and_return(true)
+      # session[:admin_role] をモックして、0を返すようにする
+      allow(controller).to receive(:session).and_return({ admin_role: 0 })
     end
 
     it "管理者一覧ページにアクセスできないこと" do
@@ -121,9 +127,12 @@ RSpec.describe Admin::AdminUsersController, type: :controller do
   # 管理者ユーザーが最後の一人である場合、削除できない
   describe "最後の管理者ユーザー削除制限" do
     before do
-      # ログインチェックをモックして常に通過させる
+      # ログインチェックをモックして、trueを返すようにする
       allow(controller).to receive(:check_login).and_return(true)
-      session[:admin_role] = 1  # 特権管理者ロール
+      # 特権管理者判定をモックして、trueを返すようにする
+      allow(controller).to receive(:super_admin?).and_return(true)
+      # session[:admin_role] をモックして、1を返すようにする
+      allow(controller).to receive(:session).and_return({ admin_role: 1 })
     end
 
     it "最後の管理者を削除できないこと" do
