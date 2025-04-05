@@ -30,21 +30,15 @@ class Admin::StoresController < ApplicationController
 
   def update
     # 並び順の変更処理
-    if (direction = store_params[:direction]&.to_sym)
+    if (direction = store_params[:direction]&.to_sym) && %i[higher lower].include?(direction)
       scope_type = store_params[:scope_type]&.to_sym || :brand
-
-      if %i[higher lower].include?(direction)
-        @store.move(direction, scope_type: scope_type)
-        redirect_to(scope_type == :all ? admin_stores_path : admin_brand_path(@brand), notice: "店舗の順番を変更しました。") and return
-      end
+      @store.move(direction, scope_type: scope_type)
+      redirect_to(scope_type == :all ? admin_stores_path : admin_brand_path(@brand), notice: "店舗の順番を変更しました。") and return
     end
 
-    # 権限チェック
-    unless super_admin?
-      redirect_to admin_root_path, alert: "特権管理者のみアクセスが可能です。" and return
-    end
+    # 権限チェックと店舗情報の更新処理
+    return redirect_to admin_root_path, alert: "特権管理者のみアクセスが可能です。" unless super_admin?
 
-    # 店舗情報の更新処理
     if @store.update(store_params.except(:direction, :scope_type))
       redirect_to admin_brand_path(@brand), notice: "店舗情報が更新されました。"
     else
