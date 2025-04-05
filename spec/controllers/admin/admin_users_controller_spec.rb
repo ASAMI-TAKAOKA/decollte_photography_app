@@ -7,7 +7,8 @@ RSpec.describe Admin::AdminUsersController, type: :controller do
   # 特権管理者(admin)のアクセス
   describe "特権管理者(admin) のアクセス" do
     before do
-      session[:admin_user_id] = super_admin.id # 特権管理者としてログイン
+      # ログインチェックをモックして常に通過させる
+      allow(controller).to receive(:check_login).and_return(true)
       session[:admin_role] = 1  # 特権管理者ロール
     end
 
@@ -61,7 +62,8 @@ RSpec.describe Admin::AdminUsersController, type: :controller do
   # 一般管理者(regular_admin)のアクセス
   describe "一般管理者(regular_admin) のアクセス" do
     before do
-      session[:admin_user_id] = regular_admin.id # 一般管理者としてログイン
+      # ログインチェックをモックして常に通過させる
+      allow(controller).to receive(:check_login).and_return(true)
       session[:admin_role] = 0  # 一般管理者ロール
     end
 
@@ -119,7 +121,8 @@ RSpec.describe Admin::AdminUsersController, type: :controller do
   # 管理者ユーザーが最後の一人である場合、削除できない
   describe "最後の管理者ユーザー削除制限" do
     before do
-      session[:admin_user_id] = super_admin.id # 特権管理者としてログイン
+      # ログインチェックをモックして常に通過させる
+      allow(controller).to receive(:check_login).and_return(true)
       session[:admin_role] = 1  # 特権管理者ロール
     end
 
