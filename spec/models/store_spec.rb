@@ -7,6 +7,13 @@ RSpec.describe Store, type: :model do
     it { should validate_presence_of(:name) }
     it { should validate_presence_of(:address) }
     it { should validate_presence_of(:phone_number) }
+
+    it "nameがユニークであること" do
+      Store.create!(name: "UniqueStore", address: "Address1", phone_number: "0120-111-111", brand: brand)
+      duplicate_store = Store.new(name: "UniqueStore", address: "Address2", phone_number: "0120-222-222", brand: brand)
+      expect(duplicate_store).not_to be_valid
+      expect(duplicate_store.errors[:name]).to include("はすでに存在します")
+    end
   end
 
   describe "acts_as_list" do
