@@ -69,12 +69,6 @@ class Admin::StoresController < ApplicationController
     @store = Store.find(params[:id])
   end
 
-  def prohibit_access_for_regular_admin
-    unless super_admin?
-      redirect_to admin_root_path, alert: "特権管理者のみアクセスが可能です。"
-    end
-  end
-
   def store_params
     params.require(:store).permit(:name, :address, :phone_number, :direction, :scope_type)
   end

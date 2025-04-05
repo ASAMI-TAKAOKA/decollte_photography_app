@@ -47,13 +47,6 @@ class Admin::BrandsController < ApplicationController
     @brand = Brand.find_by!(slug: params[:id]) # idではなくslugでブランドを特定する
   end
 
-  # 一般管理者のアクセスを禁じる
-  def prohibit_access_for_regular_admin
-    unless super_admin?
-      redirect_to admin_root_path, alert: "特権管理者のみアクセスが可能です。"
-    end
-  end
-
   def brand_params
     params.require(:brand).permit(:name, :slug)
   end

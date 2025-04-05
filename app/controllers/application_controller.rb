@@ -25,4 +25,11 @@ class ApplicationController < ActionController::Base
   def regular_admin?
     session[:admin_role] == 0
   end
+
+  # 一般管理者のアクセスを禁じる
+  def prohibit_access_for_regular_admin
+    unless session[:admin_role] == 1
+      redirect_to admin_dashboards_path, alert: "特権管理者のみアクセスが可能です。"
+    end
+  end
 end
