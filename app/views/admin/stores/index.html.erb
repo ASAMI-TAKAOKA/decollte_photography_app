@@ -1,32 +1,36 @@
 <% content_for :title, "全店舗一覧" %>
 <h2>全店舗一覧</h2>
 
-<table>
-  <thead>
-    <tr>
-      <th>並び順変更</th>
-      <th>position</th>
-      <th>id</th>
-      <th>店舗名</th>
-      <th>住所</th>
-      <th>電話番号</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @stores.each do |store| %>
+<% @grouped_stores.each do |brand, stores| %>
+  <h3><%= brand.name %></h3>
+
+  <table>
+    <thead>
       <tr>
-        <td>
-          <%= link_to '⬆', admin_store_path(store, store: { direction: "higher", scope_type: "all" }), data: { turbo_method: :patch }, class: "btn btn-primary" %>
-          <%= link_to '⬇', admin_store_path(store, store: { direction: "lower", scope_type: "all" }), data: { turbo_method: :patch }, class: "btn btn-primary" %>
-        </td>
-        <td><%= store.position %></td>
-        <td><%= store.id %></td>
-        <td><%= store.name %></td>
-        <td><%= store.address %></td>
-        <td><%= store.phone_number %></td>
+        <th>並び順変更</th>
+        <th>position</th>
+        <th>id</th>
+        <th>店舗名</th>
+        <th>住所</th>
+        <th>電話番号</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% stores.each do |store| %>
+        <tr>
+          <td>
+            <%= link_to '⬆', admin_store_path(store, store: { direction: "higher", scope_type: "all" }), data: { turbo_method: :patch }, class: "btn btn-primary" %>
+            <%= link_to '⬇', admin_store_path(store, store: { direction: "lower", scope_type: "all" }), data: { turbo_method: :patch }, class: "btn btn-primary" %>
+          </td>
+          <td><%= store.position %></td>
+          <td><%= store.id %></td>
+          <td><%= store.name %></td>
+          <td><%= store.address %></td>
+          <td><%= store.phone_number %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
 
 <%= link_to 'ダッシュボードへ戻る', admin_root_path %>
