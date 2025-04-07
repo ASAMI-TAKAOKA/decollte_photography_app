@@ -181,20 +181,14 @@ RSpec.describe Admin::StoresController, type: :controller do
       end
 
       it "店舗順番の変更が行われること (higher)" do
-        patch :update, params: { brand_id: brand.slug, id: store.id, store: { direction: "higher", scope_type: "brand", position: 1 } }
+        patch :update, params: { brand_id: brand.slug, id: store.id, store: { direction: "higher", position: 1 } }
         expect(response).to redirect_to(admin_brand_path(brand))
         expect(flash[:notice]).to eq("店舗の順番を変更しました。")
       end
 
       it "店舗順番の変更が行われること (lower)" do
-        patch :update, params: { brand_id: brand.slug, id: store.id, store: { direction: "lower", scope_type: "brand", position: 1 } }
+        patch :update, params: { brand_id: brand.slug, id: store.id, store: { direction: "lower", position: 1 } }
         expect(response).to redirect_to(admin_brand_path(brand))
-        expect(flash[:notice]).to eq("店舗の順番を変更しました。")
-      end
-
-      it "scope_type が all の場合、リダイレクト先が店舗一覧ページであること" do
-        patch :update, params: { brand_id: brand.slug, id: store.id, store: { direction: "higher", scope_type: "all", position: 1 } }
-        expect(response).to redirect_to(admin_stores_path)
         expect(flash[:notice]).to eq("店舗の順番を変更しました。")
       end
     end
