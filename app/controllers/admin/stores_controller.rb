@@ -31,20 +31,20 @@ class Admin::StoresController < ApplicationController
   def update
     # 並び順の変更処理
     if (direction = store_params[:direction]&.to_sym) && %i[higher lower].include?(direction)
-      scope_type = store_params[:scope_type]&.to_sym || :brand
-      @store.move(direction, scope_type: scope_type)
-      redirect_to(scope_type == :all ? admin_stores_path : admin_brand_path(@brand), notice: "店舗の順番を変更しました。") and return
+      @store.move(direction)
+      redirect_to admin_brand_path(@brand), notice: "店舗の順番を変更しました。" and return
     end
 
     # 権限チェックと店舗情報の更新処理
     return redirect_to admin_root_path, alert: "特権管理者のみアクセスが可能です。" unless super_admin?
 
-    if @store.update(store_params.except(:direction, :scope_type))
+    if @store.update(store_params.except(:direction))
       redirect_to admin_brand_path(@brand), notice: "店舗情報が更新されました。"
     else
       render :edit, status: :unprocessable_entity
     end
   end
+
 
   def destroy
     @store.destroy
@@ -54,8 +54,6 @@ class Admin::StoresController < ApplicationController
   private
 
   def set_brand
-    return if params[:store]&.dig(:scope_type) == "all" # scope_type が all の場合は @brand をセットしない
-
     @brand = Brand.find_by!(slug: params[:brand_id]) # idではなくslugでブランドを特定する
   end
 
@@ -64,6 +62,6 @@ class Admin::StoresController < ApplicationController
   end
 
   def store_params
-    params.require(:store).permit(:name, :address, :phone_number, :direction, :scope_type)
+    params.require(:store).permit(:name, :address, :phone_number, :direction)
   end
 end

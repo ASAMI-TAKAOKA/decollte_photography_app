@@ -19,8 +19,8 @@
       <% stores.each do |store| %>
         <tr>
           <td>
-            <%= link_to '⬆', admin_store_path(store, store: { direction: "higher", scope_type: "all" }), data: { turbo_method: :patch }, class: "btn btn-primary" %>
-            <%= link_to '⬇', admin_store_path(store, store: { direction: "lower", scope_type: "all" }), data: { turbo_method: :patch }, class: "btn btn-primary" %>
+            <%= link_to '⬆', admin_store_path(store, store: { direction: "higher" }), data: { turbo_method: :patch }, class: "btn btn-primary" %>
+            <%= link_to '⬇', admin_store_path(store, store: { direction: "lower" }), data: { turbo_method: :patch }, class: "btn btn-primary" %>
           </td>
           <td><%= store.position %></td>
           <td><%= store.id %></td>
