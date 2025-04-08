@@ -1,5 +1,4 @@
-class Admin::BrandsController < ApplicationController
-  before_action :check_login
+class Admin::BrandsController < Admin::BaseController
   before_action :set_brand, only: %i[ show edit update destroy ]
   before_action :prohibit_access_for_regular_admin, only: %i[ edit update destroy ]
 

@@ -1,4 +1,6 @@
-class Admin::SessionsController < ApplicationController
+class Admin::SessionsController < Admin::BaseController
+  skip_before_action :check_login
+
   def new
     if admin_logged_in?
       redirect_to admin_root_path, notice: "すでにログインしています。"

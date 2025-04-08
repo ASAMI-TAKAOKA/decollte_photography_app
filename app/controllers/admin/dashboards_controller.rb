@@ -1,7 +1,4 @@
-class Admin::DashboardsController < ApplicationController
-  before_action :check_login
-
+class Admin::DashboardsController < Admin::BaseController
   def show
   end
-
 end
