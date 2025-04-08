@@ -19,7 +19,6 @@ class Admin::SessionsController < Admin::BaseController
 
     if admin_user&.authenticate(params[:password])
       session[:admin_user_id] = admin_user.id
-      session[:admin_role] = admin_user.role # 0: 一般管理者, 1: 特権管理者
 
       redirect_to admin_root_path, notice: "ログインしました。"
     else

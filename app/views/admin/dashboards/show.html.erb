@@ -1,4 +1,4 @@
-<% if session[:admin_role] == 1 %>
+<% if current_user.super_admin? %>
   <%= render "super_admin_show" %>
 <% else %>
   <%= render "regular_admin_show" %>
