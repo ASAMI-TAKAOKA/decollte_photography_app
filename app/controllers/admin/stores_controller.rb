@@ -36,7 +36,7 @@ class Admin::StoresController < ApplicationController
     end
 
     # 権限チェックと店舗情報の更新処理
-    return redirect_to admin_root_path, alert: "特権管理者のみアクセスが可能です。" unless super_admin?
+    return redirect_to admin_root_path, alert: "特権管理者のみアクセスが可能です。" unless current_user.super_admin?
 
     if @store.update(store_params.except(:direction))
       redirect_to admin_brand_path(@brand), notice: "店舗情報が更新されました。"

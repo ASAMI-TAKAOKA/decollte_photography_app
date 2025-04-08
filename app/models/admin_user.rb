@@ -4,8 +4,8 @@ class AdminUser < ApplicationRecord
   validates :username, presence: true, uniqueness: true
   validates :password, length: { minimum: 6 }, if: -> { new_record? || !password.nil? }
   validates :role, presence: true, inclusion: { in: [ 0, 1 ] } # 0: 一般管理者, 1: 特権管理者
-
   validate :only_one_super_admin, if: -> { role == 1 }
+  enum :role, { regular_admin: 0, super_admin: 1 }, default: :regular_admin
 
   private
 
