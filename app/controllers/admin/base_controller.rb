@@ -7,14 +7,12 @@ module Admin
 
     # ログイン認証をチェックする
     def check_login
-      unless session[:admin_user_id]
-        redirect_to new_admin_session_path, alert: "ログインが必要です。"
-      end
+      redirect_to new_admin_session_path, alert: "ログインが必要です。" unless session[:admin_user_id]
     end
 
     def current_user
-      return nil if session[:admin_user_id]&.blank?
-  
+      return nil unless session[:admin_user_id].present?
+
       @admin_user ||= AdminUser.find(session[:admin_user_id])
     end
 
@@ -25,9 +23,7 @@ module Admin
 
     # 一般管理者のアクセスを禁じる
     def prohibit_access_for_regular_admin
-      unless current_user.super_admin?
-        redirect_to admin_root_path, alert: "特権管理者のみアクセスが可能です。"
-      end
+      redirect_to admin_root_path, alert: "特権管理者のみアクセスが可能です。" unless current_user.super_admin?
     end
   end
 end

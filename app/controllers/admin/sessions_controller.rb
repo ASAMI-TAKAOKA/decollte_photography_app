@@ -10,10 +10,8 @@ class Admin::SessionsController < Admin::BaseController
   end
 
   def create
-    if admin_logged_in?
-      redirect_to admin_root_path, notice: "すでにログインしています。"
-      return
-    end
+    return redirect_to admin_root_path, notice: "すでにログインしています。" if admin_logged_in?
+
     # 管理者認証を DB に基づいて行う
     admin_user = AdminUser.find_by(username: params[:username])
 

@@ -1,5 +1,5 @@
 class Admin::AdminUsersController < Admin::BaseController
-  before_action :prohibit_access_for_regular_admin, only: %i[ index show new create edit update destroy ]
+  before_action :prohibit_access_for_regular_admin
   before_action :set_admin_user, only: %i[ show edit update destroy ]
 
   def index
@@ -42,9 +42,7 @@ class Admin::AdminUsersController < Admin::BaseController
   # 管理者の削除
   def destroy
     # 管理者ユーザーが1人しかいない場合は削除できないようにする
-    if AdminUser.count == 1
-      redirect_to admin_admin_users_path, alert: "最後の管理者は削除できません。" and return
-    end
+    return redirect_to admin_admin_users_path, alert: "最後の管理者は削除できません。" if AdminUser.count == 1
 
     @admin_user.destroy
     redirect_to admin_admin_users_path, notice: "一般管理者を削除しました。"
