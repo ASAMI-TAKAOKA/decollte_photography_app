@@ -9,11 +9,15 @@ Rails.application.routes.draw do
 
     # ブランド・店舗管理
     resources :brands do
-      resources :stores
+      resources :stores do
+        resource :position, only: %i[ update ], module: :stores
+      end
     end
 
     # ブランドに紐づかない店舗一覧
-    resources :stores, only: %i[ index update ]
+    resources :stores, only: %i[ index ] do
+      resource :position, only: %i[ update ], module: :stores
+    end
   end
 
   # 一般ユーザー向けのブランド一覧、ブランド詳細

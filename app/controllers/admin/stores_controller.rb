@@ -28,22 +28,14 @@ class Admin::StoresController < Admin::BaseController
   end
 
   def update
-    # 並び順の変更処理
-    if (direction = store_params[:direction]&.to_sym) && %i[higher lower].include?(direction)
-      @store.move(direction)
-      redirect_to admin_brand_path(@brand), notice: "店舗の順番を変更しました。" and return
-    end
-
-    # 権限チェックと店舗情報の更新処理
     return redirect_to admin_root_path, alert: "特権管理者のみアクセスが可能です。" unless current_user.super_admin?
 
-    if @store.update(store_params.except(:direction))
+    if @store.update(store_params)
       redirect_to admin_brand_path(@brand), notice: "店舗情報が更新されました。"
     else
       render :edit, status: :unprocessable_entity
     end
   end
-
 
   def destroy
     @store.destroy
@@ -61,6 +53,6 @@ class Admin::StoresController < Admin::BaseController
   end
 
   def store_params
-    params.require(:store).permit(:name, :address, :phone_number, :direction)
+    params.require(:store).permit(:name, :address, :phone_number)
   end
 end
