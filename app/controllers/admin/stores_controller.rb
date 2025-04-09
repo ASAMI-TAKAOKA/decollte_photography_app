@@ -1,7 +1,7 @@
 class Admin::StoresController < Admin::BaseController
   before_action :set_brand, only: %i[ new create show edit update destroy ]
   before_action :set_store, only: %i[ show edit update destroy ]
-  before_action :prohibit_access_for_regular_admin, only: %i[ show new create edit destroy ]
+  before_action :prohibit_access_for_regular_admin, only: %i[ show new create edit update destroy ]
 
   def index
     @grouped_stores = Store.includes(:brand).order(:brand_id, :position).group_by(&:brand)
@@ -28,8 +28,6 @@ class Admin::StoresController < Admin::BaseController
   end
 
   def update
-    return redirect_to admin_root_path, alert: "特権管理者のみアクセスが可能です。" unless current_user.super_admin?
-
     if @store.update(store_params)
       redirect_to admin_brand_path(@brand), notice: "店舗情報が更新されました。"
     else
