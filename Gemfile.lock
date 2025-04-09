@@ -98,6 +98,8 @@ GEM
     diff-lcs (1.6.0)
     drb (2.2.1)
     erubi (1.13.1)
+    friendly_id (5.5.1)
+      activerecord (>= 4.0.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.7)
@@ -326,6 +328,7 @@ DEPENDENCIES
   bootsnap
   brakeman
   debug
+  friendly_id (~> 5.5.0)
   importmap-rails
   propshaft
   pry-byebug (~> 3.10)

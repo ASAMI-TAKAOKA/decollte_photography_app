@@ -43,7 +43,7 @@ class Admin::StoresController < Admin::BaseController
   private
 
   def set_brand
-    @brand = Brand.find_by!(slug: params[:brand_id]) # idではなくslugでブランドを特定する
+    @brand = Brand.friendly.find(params[:brand_id])
   end
 
   def set_store
