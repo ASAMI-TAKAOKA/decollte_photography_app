@@ -3,7 +3,7 @@ class Admin::Stores::PositionsController < Admin::BaseController
   before_action :set_store
 
   def update
-    raise ActionController::BadRequest.new("Invalid direction: #{direction}") unless %w[move_higher move_lower].include? store_params[:direction]
+    raise ActionController::BadRequest.new("Invalid direction: #{store_params[:direction]}") unless %w[move_higher move_lower].include? store_params[:direction]
 
     @store.send(store_params[:direction])
     redirect_path = @brand ? admin_brand_path(@brand) : admin_stores_path

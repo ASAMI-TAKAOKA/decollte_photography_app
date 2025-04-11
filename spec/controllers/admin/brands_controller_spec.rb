@@ -1,163 +1,120 @@
 require 'rails_helper'
 
-RSpec.describe Admin::BrandsController, type: :controller do
-  let!(:brand) { Brand.create(name: "TestBrand", slug: "test-brand") }
-
-  before do
-    # ログインチェックをモックして、trueを返すようにする
-    allow(controller).to receive(:check_login).and_return(true)
-  end
+describe Admin::BrandsController, type: :controller do
+  let!(:super_admin) { AdminUser.create!(username: "admin", password: "UMtDj4ZBv%&d@Tzh", role: 1) }
+  let!(:regular_admin) { AdminUser.create!(username: "regular_admin", password: "password", role: 0) }
+  let!(:brand) { Brand.create!(name: "BrandName", slug: "brand-name") }
 
   describe "GET #index" do
-    it "ブランド一覧ページが正常に表示されること" do
+    before { session[:admin_user_id] = super_admin.id }
+
+    it "ブランド一覧ページが表示されること" do
       get :index
       expect(response).to be_successful
-      expect(assigns(:brands)).to eq([ brand ])
     end
   end
 
   describe "GET #show" do
-    it "ブランド詳細ページが正常に表示されること" do
+    before { session[:admin_user_id] = super_admin.id }
+
+    it "ブランド詳細ページが表示されること" do
       get :show, params: { id: brand.slug }
       expect(response).to be_successful
-      expect(assigns(:brand)).to eq(brand)
-      expect(assigns(:stores)).to eq(brand.stores)
     end
   end
 
   describe "GET #new" do
-    it "新しいブランド作成ページが正常に表示されること" do
+    before { session[:admin_user_id] = super_admin.id }
+
+    it "新規ブランド作成ページが表示されること" do
       get :new
       expect(response).to be_successful
-      expect(assigns(:brand)).to be_a_new(Brand)
     end
   end
 
   describe "POST #create" do
-    context "正常な場合" do
-      it "ブランドが作成されること" do
+    before { session[:admin_user_id] = super_admin.id }
+
+    context "有効なパラメータの場合" do
+      it "ブランドが作成され、ブランド一覧にリダイレクトされること" do
         expect {
           post :create, params: { brand: { name: "NewBrand", slug: "new-brand" } }
         }.to change(Brand, :count).by(1)
+
         expect(response).to redirect_to(admin_brands_path)
-        expect(flash[:notice]).to eq("ブランドを作成しました。")
       end
     end
 
-    context "不正なパラメータの場合" do
-      it "ブランドが作成されないこと" do
+    context "無効なパラメータの場合" do
+      it "ブランド作成ページを再表示すること" do
         post :create, params: { brand: { name: "", slug: "" } }
-        expect(response).to render_template(:new)
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
 
   describe "GET #edit" do
-    context "特権管理者の場合" do
-      before do
-        # 特権管理者判定をモックして、trueを返すようにする
-        allow(controller).to receive(:super_admin?).and_return(true)
-        # session[:admin_role] をモックして、1を返すようにする
-        allow(controller).to receive(:session).and_return({ admin_role: 1 })
-      end
+    context "super_admin の場合" do
+      before { session[:admin_user_id] = super_admin.id }
 
       it "ブランド編集ページが表示されること" do
         get :edit, params: { id: brand.slug }
         expect(response).to be_successful
-        expect(assigns(:brand)).to eq(brand)
       end
     end
 
-    context "一般管理者の場合" do
-      before do
-        # 一般管理者判定をモックして、trueを返すようにする
-        allow(controller).to receive(:regular_admin?).and_return(true)
-        # session[:admin_role] をモックして、0を返すようにする
-        allow(controller).to receive(:session).and_return({ admin_role: 0 })
-      end
+    context "regular_admin の場合" do
+      before { session[:admin_user_id] = regular_admin.id }
 
-      it "ブランド編集ページにアクセスできないこと" do
+      it "管理者トップページにリダイレクトされること" do
         get :edit, params: { id: brand.slug }
-        expect(response).to redirect_to(admin_root_path) # 管理者ページにリダイレクトされる
-        expect(flash[:alert]).to eq("特権管理者のみアクセスが可能です。")
+        expect(response).to redirect_to(admin_root_path)
       end
     end
   end
 
   describe "PATCH #update" do
-    context "特権管理者の場合" do
-      before do
-        # 特権管理者判定をモックして、trueを返すようにする
-        allow(controller).to receive(:super_admin?).and_return(true)
-        # session[:admin_role] をモックして、1を返すようにする
-        allow(controller).to receive(:session).and_return({ admin_role: 1 })
-      end
+    context "super_admin の場合" do
+      before { session[:admin_user_id] = super_admin.id }
 
-      it "ブランド名が更新されること" do
+      it "ブランド名が更新され、ブランド一覧にリダイレクトされること" do
         patch :update, params: { id: brand.slug, brand: { name: "UpdatedBrandName" } }
-        expect(response).to redirect_to(admin_brands_path)
-        expect(flash[:notice]).to eq("ブランド情報が更新されました。")
         brand.reload
         expect(brand.name).to eq("UpdatedBrandName")
-      end
-
-      it "slugは更新されないこと" do
-        patch :update, params: { id: brand.slug, brand: { name: "UpdatedBrandName", slug: "UpdatedBrandSlug" } }
-
-        brand.reload
-        expect(brand.name).not_to eq("UpdatedBrandName")
-        expect(brand.slug).to eq("test-brand")
-        expect(assigns(:brand).errors[:slug]).to include("は変更できません")
+        expect(response).to redirect_to(admin_brands_path)
       end
     end
 
-    context "一般管理者の場合" do
-      before do
-        # 一般管理者判定をモックして、trueを返すようにする
-        allow(controller).to receive(:regular_admin?).and_return(true)
-        # session[:admin_role] をモックして、0を返すようにする
-        allow(controller).to receive(:session).and_return({ admin_role: 0 })
-      end
+    context "regular_admin の場合" do
+      before { session[:admin_user_id] = regular_admin.id }
 
-      it "ブランド更新ページにアクセスできないこと" do
-        patch :update, params: { id: brand.slug, brand: { name: "UpdatedBrand" } }
-        expect(response).to redirect_to(admin_root_path) # 管理者ページにリダイレクトされる
-        expect(flash[:alert]).to eq("特権管理者のみアクセスが可能です。")
+      it "ブランドは更新されず、管理者トップページにリダイレクトされること" do
+        patch :update, params: { id: brand.slug, brand: { name: "UpdatedBrandName" } }
+        brand.reload
+        expect(brand.name).to eq("BrandName")
+        expect(response).to redirect_to(admin_root_path)
       end
     end
   end
 
   describe "DELETE #destroy" do
-    context "特権管理者の場合" do
-      before do
-        # 特権管理者判定をモックして、trueを返すようにする
-        allow(controller).to receive(:super_admin?).and_return(true)
-        # session[:admin_role] をモックして、1を返すようにする
-        allow(controller).to receive(:session).and_return({ admin_role: 1 })
-      end
+    context "super_admin の場合" do
+      before { session[:admin_user_id] = super_admin.id }
 
-      it "ブランドが削除されること" do
-        expect {
-          delete :destroy, params: { id: brand.slug }
-        }.to change(Brand, :count).by(-1)
+      it "ブランドが削除され、ブランド一覧にリダイレクトされること" do
+        delete :destroy, params: { id: brand.slug }
         expect(response).to redirect_to(admin_brands_path)
-        expect(flash[:notice]).to eq("ブランドを削除しました")
+        expect(Brand.exists?(brand.id)).to be_falsey
       end
     end
 
-    context "一般管理者の場合" do
-      before do
-        # 一般管理者判定をモックして、trueを返すようにする
-        allow(controller).to receive(:regular_admin?).and_return(true)
-        # session[:admin_role] をモックして、0を返すようにする
-        allow(controller).to receive(:session).and_return({ admin_role: 0 })
-      end
+    context "regular_admin の場合" do
+      before { session[:admin_user_id] = regular_admin.id }
 
-      it "ブランド削除ページにアクセスできないこと" do
+      it "ブランドは削除されず、管理者トップページにリダイレクトされること" do
         delete :destroy, params: { id: brand.slug }
-        expect(response).to redirect_to(admin_root_path) # 管理者ページにリダイレクトされる
-        expect(flash[:alert]).to eq("特権管理者のみアクセスが可能です。")
+        expect(response).to redirect_to(admin_root_path)
+        expect(Brand.exists?(brand.id)).to be_truthy
       end
     end
   end

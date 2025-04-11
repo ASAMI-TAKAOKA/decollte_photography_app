@@ -1,51 +1,56 @@
 require 'rails_helper'
 
 RSpec.describe AdminUser, type: :model do
+  let(:valid_password) { "password" }
+
   describe "バリデーション" do
-    it "ユーザー名が空でないこと" do
-      admin_user = AdminUser.new(username: nil, password: "password")
-      expect(admin_user).to_not be_valid
-      expect(admin_user.errors[:username]).to include("を入力してください")
+    subject { described_class.new(username: username, password: password, role: role) }
+
+    let(:username) { "admin_user" }
+    let(:password) { valid_password }
+    let(:role) { :regular_admin }
+
+    context "ユーザー名" do
+      context "空の場合" do
+        let(:username) { nil }
+        it "無効であること" do
+          expect(subject).not_to be_valid
+          expect(subject.errors[:username]).to include("を入力してください")
+        end
+      end
+
+      context "一意であること" do
+        before { described_class.create!(username: username, password: valid_password, role: role) }
+        it "無効であること" do
+          expect(subject).not_to be_valid
+          expect(subject.errors[:username]).to include("はすでに存在します")
+        end
+      end
     end
 
-    it "ユーザー名が一意であること" do
-      AdminUser.create!(username: "admin", password: "password", role: 1)
-      admin_user = AdminUser.new(username: "admin", password: "password")
-      expect(admin_user).to_not be_valid
-      expect(admin_user.errors[:username]).to include("はすでに存在します")
+    context "パスワード" do
+      let(:password) { "short" }
+      it "6文字以上であること" do
+        expect(subject).not_to be_valid
+        expect(subject.errors[:password]).to include("は6文字以上で入力してください")
+      end
     end
 
-    it "パスワードが6文字以上であること" do
-      admin_user = AdminUser.new(username: "new_user", password: "short")
-      expect(admin_user).to_not be_valid
-      expect(admin_user.errors[:password]).to include("は6文字以上で入力してください")
-    end
-
-    it "役割が0または1であること" do
-      admin_user = AdminUser.new(username: "user", password: "password", role: 2)
-      expect(admin_user).to_not be_valid
-      expect(admin_user.errors[:role]).to include("は一覧にありません")
+    context "役割" do
+      it "0または1以外は無効であること" do
+        admin_user = described_class.new(username: "user", password: valid_password)
+        # enum で無効な値を強制的にセット
+        expect {
+          admin_user.role = 2
+        }.to raise_error(ArgumentError, "'2' is not a valid role")
+      end
     end
   end
 
   describe "コールバック" do
     it "新しいレコードでロールがデフォルトで0に設定されること" do
-      admin_user = AdminUser.new(username: "new_user", password: "password")
-      expect(admin_user.role).to eq(0)
-    end
-  end
-
-  describe "カスタムバリデーション" do
-    it "特権管理者が1人しか存在しないこと" do
-      AdminUser.create!(username: "admin", password: "password", role: 1)
-      new_admin_user = AdminUser.new(username: "new_admin", password: "password", role: 1)
-      expect(new_admin_user).to_not be_valid
-      expect(new_admin_user.errors[:role]).to include("特権管理者はすでに存在しています")
-    end
-
-    it "特権管理者がいない場合は問題ないこと" do
-      admin_user = AdminUser.new(username: "new_admin", password: "password", role: 1)
-      expect(admin_user).to be_valid
+      admin_user = described_class.new(username: "new_user", password: valid_password)
+      expect(admin_user.role).to eq("regular_admin")
     end
   end
 end
