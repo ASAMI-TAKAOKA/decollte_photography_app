@@ -6,8 +6,7 @@ class Admin::Stores::PositionsController < Admin::BaseController
     raise ActionController::BadRequest.new("Invalid direction: #{store_params[:direction]}") unless %w[move_higher move_lower].include? store_params[:direction]
 
     @store.send(store_params[:direction])
-    redirect_path = @brand ? admin_brand_path(@brand) : admin_stores_path
-    redirect_to redirect_path, notice: "店舗の並び順を変更しました"
+    redirect_to @brand ? admin_brand_path(@brand) : admin_stores_path, notice: "店舗の並び順を変更しました"
   end
 
   private
