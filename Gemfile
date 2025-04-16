@@ -27,6 +27,7 @@ gem "bootsnap", require: false
 gem "acts_as_list"
 gem "friendly_id", "~> 5.5.0"
 
+gem "enum_help", "~> 0.0.19"
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 

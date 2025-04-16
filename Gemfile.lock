@@ -97,6 +97,8 @@ GEM
       reline (>= 0.3.8)
     diff-lcs (1.6.0)
     drb (2.2.1)
+    enum_help (0.0.19)
+      activesupport (>= 3.0.0)
     erubi (1.13.1)
     friendly_id (5.5.1)
       activerecord (>= 4.0.0)
@@ -328,6 +330,7 @@ DEPENDENCIES
   bootsnap
   brakeman
   debug
+  enum_help (~> 0.0.19)
   friendly_id (~> 5.5.0)
   importmap-rails
   propshaft

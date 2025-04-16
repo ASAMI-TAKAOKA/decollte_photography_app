@@ -1,0 +1,6 @@
+ja:
+  enums:
+    admin_user:
+      role:
+        super_admin: 特権管理者
+        regular_admin: 一般管理者

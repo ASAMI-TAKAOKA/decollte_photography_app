@@ -18,7 +18,7 @@
       <tr>
         <td><%= admin_user.id %></td>
         <td><%= admin_user.username %></td>
-        <td><%= admin_user.role == 1 ? '特権管理者' : '一般管理者' %></td>
+        <td><%= admin_user.role_i18n %></td>
         <td>
           <%= link_to '詳細', admin_admin_user_path(admin_user) %>
           <%= link_to '編集', edit_admin_admin_user_path(admin_user) %>
