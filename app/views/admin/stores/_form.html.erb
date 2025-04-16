@@ -1,0 +1,33 @@
+<%= form_with model: @store, url: @store.new_record? ? admin_brand_stores_path(@brand) : admin_brand_store_path(@brand, @store), method: @store.new_record? ? :post : :patch do |form| %>
+  <% if @store.errors.any? %>
+    <div style="color: red">
+      <h2><%= t("errors.template.header", model: @store.model_name.human, count: @store.errors.count) %></h2>
+      <ul>
+        <% @store.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label "店舗名" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label "住所" %>
+    <%= form.text_field :address %>
+  </div>
+
+  <div>
+    <%= form.label  "電話番号"%>
+    <%= form.text_field :phone_number %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
+
+

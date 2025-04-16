@@ -1,0 +1,15 @@
+<h1>管理者ログイン</h1>
+
+<%= form_with url: admin_session_path, method: :post, local: true do |f| %>
+  <div>
+    <%= f.label :username, "ユーザー名" %>
+    <%= f.text_field :username %>
+  </div>
+  <div>
+    <%= f.label :password, "パスワード" %>
+    <%= f.password_field :password %>
+  </div>
+  <div>
+    <%= f.submit "ログイン" %>
+  </div>
+<% end %>

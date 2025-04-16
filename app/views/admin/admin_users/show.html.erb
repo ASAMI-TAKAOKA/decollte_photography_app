@@ -1,0 +1,10 @@
+<% content_for :title, "管理者詳細" %>
+
+<%= render @admin_user %>
+
+<div>
+  <%= link_to "編集", edit_admin_admin_user_path(@admin_user) %> |
+  <%= link_to "管理者一覧に戻る", admin_admin_users_path %>
+  <%= link_to '削除', admin_admin_user_path(@admin_user), data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" } %>
+
+</div>

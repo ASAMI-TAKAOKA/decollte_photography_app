@@ -1,7 +1,15 @@
-<% if session[:admin_user] == "admin" || session[:admin_user] == "regular_admin" %>
-  <!-- 管理者用のブランド一覧 -->
-  <%= render 'admin_brand_index' %>
-<% else %>
-  <!-- 一般ユーザー用のブランド一覧 -->
-  <%= render 'general_user_brand_index' %>
-<% end %>
+<% content_for :title, "ブランド一覧（一般ユーザー向け）" %>
+<h1>ブランド一覧（一般ユーザー向け）</h1>
+
+<!-- ブランドカード表示（一般ユーザー用） -->
+<div class="grid general-user-brand-index">
+  <% @brands.each do |brand| %>
+    <div class="card general-card">
+      <div class="h3">
+        <%= link_to brand.name, brand_path(brand) %>
+      </div>
+    </div>
+  <% end %>
+</div>
+<%= link_to '全店舗一覧', stores_path %>
+<%= link_to '管理者専用ページ', admin_root_path %>

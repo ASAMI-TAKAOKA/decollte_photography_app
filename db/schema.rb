@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_22_143816) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_09_141558) do
   create_table "admin_users", force: :cascade do |t|
     t.string "username"
     t.string "password_digest"
-    t.integer "role"
+    t.integer "role", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -28,6 +28,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_22_143816) do
     t.index ["slug"], name: "index_brands_on_slug", unique: true
   end
 
+  create_table "friendly_id_slugs", force: :cascade do |t|
+    t.string "slug", null: false
+    t.integer "sluggable_id", null: false
+    t.string "sluggable_type", limit: 50
+    t.string "scope"
+    t.datetime "created_at"
+    t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
+    t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
+    t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
   create_table "stores", force: :cascade do |t|
     t.string "name"
     t.integer "brand_id", null: false
@@ -36,10 +47,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_22_143816) do
     t.integer "position"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "global_position"
-    # (Review)
-    # この行は不要ではないですか？ 順番の状態を２つ持つことより、positionを有効に使いましょう！
-    # これがたいしたことない機能を必要以上に複雑にしている感じがします。
     t.index ["brand_id"], name: "index_stores_on_brand_id"
     t.index ["name"], name: "index_stores_on_name", unique: true
   end

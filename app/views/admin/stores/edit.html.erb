@@ -1,0 +1,11 @@
+<% content_for :title, "店舗の編集" %>
+
+<h1><%= @store.name %> 店舗の編集</h1>
+
+<%= render "form", store: @store %>
+
+<br>
+
+<div>
+  <%= link_to '詳細', admin_brand_store_path(@store.brand.slug, @store) %>
+</div>

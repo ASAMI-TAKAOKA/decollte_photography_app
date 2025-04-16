@@ -1,0 +1,26 @@
+<%= form_with(model: admin_user, url: admin_user.persisted? ? admin_admin_user_path(admin_user) : admin_admin_users_path) do |form| %>
+  <% if admin_user.errors.any? %>
+    <div style="color: red">
+      <h2><%= t("errors.template.header", model: admin_user.model_name.human, count: admin_user.errors.count) %></h2>
+      <ul>
+        <% admin_user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :username, 'ユーザー名', style: "display: block" %>
+    <%= form.text_field :username %>
+  </div>
+
+  <div>
+    <%= form.label :password, 'パスワード', style: "display: block" %>
+    <%= form.text_field :password %>
+  </div>
+
+  <div>
+    <%= form.submit class: "btn-primary"%>
+  </div>
+<% end %>

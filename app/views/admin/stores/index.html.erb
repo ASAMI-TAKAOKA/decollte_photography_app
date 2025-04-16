@@ -1,0 +1,36 @@
+<% content_for :title, "全店舗一覧" %>
+<h2>全店舗一覧</h2>
+
+<% @grouped_stores.each do |brand, stores| %>
+  <h3><%= brand.name %></h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>並び順変更</th>
+        <th>position</th>
+        <th>id</th>
+        <th>店舗名</th>
+        <th>住所</th>
+        <th>電話番号</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% stores.each do |store| %>
+        <tr>
+          <td>
+            <%= link_to '⬆', admin_store_position_path(store, store: { direction: "move_higher" }), data: { turbo_method: :patch }, class: "btn btn-primary" %>
+            <%= link_to '⬇', admin_store_position_path(store, store: { direction: "move_lower" }), data: { turbo_method: :patch }, class: "btn btn-primary" %>
+          </td>
+          <td><%= store.position %></td>
+          <td><%= store.id %></td>
+          <td><%= store.name %></td>
+          <td><%= store.address %></td>
+          <td><%= store.phone_number %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<%= link_to 'ダッシュボードへ戻る', admin_root_path %>

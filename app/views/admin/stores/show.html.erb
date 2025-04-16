@@ -1,0 +1,11 @@
+<% content_for :title, "店舗詳細" %>
+
+<h1><%= @store.name %> の詳細</h1>
+
+<p>ブランド名: <%= @brand.name %></p>
+<p>id: <%= @store.id %></p>
+<p>住所: <%= @store.address %></p>
+<p>電話番号: <%= @store.phone_number %></p>
+
+<%= link_to '編集', edit_admin_brand_store_path(@brand.slug, @store) %>
+<%= link_to '店舗一覧に戻る', admin_brand_path(@brand) %>

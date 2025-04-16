@@ -1,34 +1,43 @@
 require 'rails_helper'
 
 RSpec.describe Store, type: :model do
-  let!(:brand) { Brand.create(name: "TestBrand") }  # Brandを手動で作成
+  let!(:brand) { Brand.create!(name: "TestBrand") }
 
   describe "バリデーション" do
-    it { should validate_presence_of(:name) }
-    it { should validate_presence_of(:address) }
-    it { should validate_presence_of(:phone_number) }
-  end
+    subject { described_class.new(name: name, address: address, phone_number: phone_number, brand: brand) }
 
-  describe "global_positionの設定" do
-    it "新しい店舗を作成するとき、次に利用可能なglobal_positionが設定される" do
-      store = Store.create!(name: "Store1", address: "Address1", phone_number: "0120-111-111", position: 1, brand_id: brand.id)
-      expect(store.global_position).to eq(1)  # 新規作成時にglobal_positionが1になることを確認
-    end
+    let(:name) { "TestStore" }
+    let(:address) { "Test Address" }
+    let(:phone_number) { "0120-111-111" }
 
-    it "店舗が存在しない場合、新しく作成した店舗のglobal_positionは1から始まる" do
-      Store.delete_all  # テスト開始前に全てのStoreを削除
-      store = Store.create!(name: "Store1", address: "Address1", phone_number: "0120-111-111", position: 1, brand_id: brand.id)
-      expect(store.global_position).to eq(1)  # 最初のStoreのglobal_positionが1であることを確認
+    it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:address) }
+    it { is_expected.to validate_presence_of(:phone_number) }
+
+    context "nameのユニーク性" do
+      before { described_class.create!(name: name, address: "Address1", phone_number: "0120-111-111", brand: brand) }
+
+      it { is_expected.not_to be_valid }
+      it "エラーが出ること" do
+        subject.validate
+        expect(subject.errors[:name]).to include("はすでに存在します")
+      end
     end
   end
 
   describe "acts_as_list" do
-    it "ブランド内での店舗の順番が正しく管理される" do
-      store1 = Store.create!(name: "Store1", address: "Address1", phone_number: "0120-111-111", position: 1, brand_id: brand.id)
-      store2 = Store.create!(name: "Store2", address: "Address2", phone_number: "0120-222-222", position: 2, brand_id: brand.id)
+    let!(:store1) { described_class.create!(name: "Store1", address: "Address1", phone_number: "0120-111-111", brand: brand) }
+    let!(:store2) { described_class.create!(name: "Store2", address: "Address2", phone_number: "0120-222-222", brand: brand) }
 
+    it "ブランド内での店舗の順番が正しく管理される" do
       expect(store1.position).to eq(1)
       expect(store2.position).to eq(2)
+    end
+
+    it "店舗の順序を上げることができる" do
+      store2.move_higher
+      expect(store2.reload.position).to eq(1)
+      expect(store1.reload.position).to eq(2)
     end
   end
 end

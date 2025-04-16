@@ -1,0 +1,12 @@
+<% content_for :title, "管理者情報を編集する" %>
+
+<h1>管理者情報を編集する</h1>
+
+<%= render "form", admin_user: @admin_user %>
+
+<br>
+
+<div>
+  <%= link_to "詳細", admin_admin_user_path %> |
+  <%= link_to "管理者一覧へ戻る", admin_admin_users_path %>
+</div>

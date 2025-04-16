@@ -1,7 +1,26 @@
-<% if session[:admin_user] == "admin" || session[:admin_user] == "regular_admin" %>
-  <!-- 管理者用のブランド詳細 -->
-  <%= render 'admin_brand_show' %>
-<% else %>
-  <!-- 一般ユーザー用のブランド詳細 -->
-  <%= render 'general_user_brand_show' %>
-<% end %>
+<% content_for :title, "ブランド詳細" %>
+<h2><%= @brand.name %> の店舗一覧（一般ユーザー向け）</h2>
+
+<!-- ブランドに紐づく店舗一覧 -->
+<table>
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>店舗名</th>
+      <th>住所</th>
+      <th>電話番号</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @stores.each do |store| %>
+      <tr>
+        <td><%= store.id %></td>
+        <td><%= store.name %></td>
+        <td><%= store.address %></td>
+        <td><%= store.phone_number %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'ブランド一覧へ戻る', brands_path %>
