@@ -10,7 +10,6 @@ class Admin::SessionsController < Admin::BaseController
 
     if admin_user&.authenticate(params[:password])
       session[:admin_user_id] = admin_user.id
-
       redirect_to admin_root_path, notice: "ログインしました。"
     else
       redirect_to new_admin_session_path, alert: "ログイン情報が正しくありません。"
