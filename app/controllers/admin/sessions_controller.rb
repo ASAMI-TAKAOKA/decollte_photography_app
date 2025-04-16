@@ -1,17 +1,11 @@
 class Admin::SessionsController < Admin::BaseController
   skip_before_action :check_login
+  before_action :check_auth_and_redirect, only: %i[ new create ]
 
   def new
-    if admin_logged_in?
-      redirect_to admin_root_path, notice: "すでにログインしています。"
-    else
-      render :new
-    end
   end
 
   def create
-    return redirect_to admin_root_path, notice: "すでにログインしています。" if admin_logged_in?
-
     admin_user = AdminUser.find_by(username: params[:username])
 
     if admin_user&.authenticate(params[:password])
@@ -26,5 +20,11 @@ class Admin::SessionsController < Admin::BaseController
   def destroy
     reset_session
     redirect_to new_admin_session_path, notice: "ログアウトしました。"
+  end
+
+  private
+
+  def check_auth_and_redirect
+    redirect_to admin_root_path, notice: "すでにログインしています。" if admin_loggend_in?
   end
 end
