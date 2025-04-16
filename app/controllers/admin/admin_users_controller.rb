@@ -36,7 +36,9 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   def destroy
-    return redirect_to admin_admin_users_path, alert: "最後の管理者は削除できません。" if AdminUser.count == 1
+    if @admin_user.super_admin? && AdminUser.super_admin.count == 1
+      return redirect_to admin_admin_users_path, alert: "特権管理者は削除できません。"
+    end
 
     @admin_user.destroy
     redirect_to admin_admin_users_path, notice: "一般管理者を削除しました。"
