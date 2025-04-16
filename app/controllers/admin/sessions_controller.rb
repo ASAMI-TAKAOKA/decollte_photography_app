@@ -24,6 +24,6 @@ class Admin::SessionsController < Admin::BaseController
   private
 
   def check_auth_and_redirect
-    redirect_to admin_root_path, notice: "すでにログインしています。" if admin_loggend_in?
+    redirect_to admin_root_path, notice: "すでにログインしています。" if admin_logged_in?
   end
 end
