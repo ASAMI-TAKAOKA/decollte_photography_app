@@ -15,7 +15,6 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def create
     @admin_user = AdminUser.new(admin_user_params)
-    @admin_user.role = 0
 
     if @admin_user.save
       redirect_to admin_admin_users_path, notice: "一般管理者を作成しました。"
